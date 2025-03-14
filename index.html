@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Devotional</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&family=Libre+Baskerville:ital,wght@1,400&display=swap">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="content-wrapper">
+    
+    <!-- ✅ Title Section: Moved to the top, fully centered -->
+    <div class="top-section">
+      <div class="title-container">
+        <h1 id="project-title">IN HIS PRESENCE</h1>
+        <p id="project-description" class="subtitle">A daily devotional and study plan</p>
+      </div>
+    </div>
+
+    <!-- ✅ Date Section (Now below the title) -->
+    <div class="date-container">
+      <span class="day">13</span>
+      <span class="month">MAR</span>
+      <span id="current-date" style="display: none;"></span> <!-- ✅ Hidden current-date for JS updates -->
+    </div>
+
+    <!-- ✅ Passage Container (Centered) -->
+    <div class="subtle-container">
+        <h2 id="reference">Psalms 19</h2>  <!-- Changed from <h3> to <h2> -->
+        <p id="passage">The heavens declare the glory of God, and the sky above proclaims His handiwork...</p>
+    </div>
+
+    <!-- ✅ Reflection Section (With Subtle Styling) -->
+    <div class="reflection-section subtle-container">
+      <p id="reflection">
+        How does this psalm challenge your appreciation for both God’s creation and His Word?
+      </p>
+    </div>
+
+    <!-- ✅ Prayer Section (With Subtle Styling) -->
+    <div class="prayer-section subtle-container">
+      <p id="prayer">
+        Ask God to make His Word come alive and transform your hidden faults.
+      </p>
+    </div>
+
+    <!-- ✅ Navigation Buttons -->
+    <div class="button-container">
+      <button id="prev-day" class="arrow-button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button id="darkModeToggle" class="icon-button">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button id="next-day" class="arrow-button">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ✅ Edit Button (Fixed in Top Right) -->
+  <button id="editButton" class="edit-button">Edit</button>
+
+  <!-- ✅ Devotional Script -->
+  <script src="devotional.js"></script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+/* ===== Reset & Base Setup ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Color Variables ===== */
+:root {
+  /* 🌙 Dark Mode */
+  --dark-bg: #1e1e1e;
+  --dark-text: #ffffff;
+  --dark-container: #252525;
+  --container-text: #e0e0e0;
+
+  /* ☀️ Light Mode */
+  --light-bg: #ffffff;
+  --light-text: #333;
+  --light-container: #f4f4f4;
+
+  /* Common */
+  --accent-color: #e68a00;
+  --hover-color: #c76a00;
+}
+
+/* ===== Base Styles ===== */
+body {
+  background-color: var(--light-bg);
+  color: var(--light-text);
+  font-family: 'Georgia', serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ✅ Dark Mode */
+body.dark-mode {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* ✅ Content Wrapper */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  background-color: var(--light-container);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .content-wrapper {
+  background-color: var(--dark-container);
+}
+
+/* ===== Top Section: Title & Date ===== */
+.top-section {
+  display: flex;
+  flex-direction: column; /* Stack title and date vertically */
+  align-items: center;
+  width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--accent-color); /* ✅ Thinner line */
+  margin-bottom: 20px;
+}
+
+/* ----- Title Container ----- */
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+/* Centered Title */
+#project-title {
+  font-size: 3.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: normal; /* Allow wrapping */
+  text-align: center;
+  max-width: 80%;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--hover-color);
+  text-align: center;
+  max-width: 80%;
+  margin-bottom: 10px;
+}
+
+/* ===== Adjusted Date Styling (Moves It Up & Centers It Better) ===== */
+.date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Georgia', serif;
+  background-color: var(--light-bg);
+  border-radius: 12px; /* ✅ Rounded box */
+  padding: 12px 18px; /* ✅ Better padding for spacing */
+  width: 100px; /* ✅ Fixed width */
+  height: 85px; /* ✅ Adjust height to balance space */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  top: -10px;
+  bottom: 40px; /* ✅ Moves the box up slightly */
+  z-index: 10;
+}
+
+/* ✅ Day Styling */
+.day {
+  font-size: 2.5rem; /* ✅ Adjusted for better fit */
+  font-weight: 700;
+  color: var(--accent-color); /* ✅ Ensures correct text color */
+  text-align: center;
+  line-height: 1;
+}
+
+/* ✅ Month Styling */
+.month {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--light-text-color); /* ✅ Improved contrast */
+  text-align: center;
+  margin-top: 2px; /* ✅ Small spacing below day */
+}
+/* ✅ Light Mode Date Background */
+.date-container {
+  background-color: var(--light-container); /* ✅ Softer look */
+}
+
+/* ===== Dark Mode Styling Adjustments ===== */
+body.dark-mode {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* ✅ Dark Mode Date Box */
+body.dark-mode .date-container {
+  background-color: var(--dark-container); /* ✅ Darker tone to blend well */
+  border: 1px solid var(--hover-color); /* ✅ Adds definition */
+}
+
+/* ✅ Dark Mode Month Text */
+body.dark-mode .month {
+  color: var(--container-text); /* ✅ Lighter to balance visibility */
+}
+/* ===== Passage Section ===== */
+.subtle-container {
+  background-color: var(--light-container);
+  color: var(--light-text);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .subtle-container {
+  background-color: var(--dark-container);
+  color: var(--dark-text);
+}
+
+/* Passage Reference */
+#reference {
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+/* Passage Text */
+.subtle-container p {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
+/* ===== Reflection & Prayer Icons ===== */
+.reflection-section::before,
+.prayer-section::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 1.5rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--accent-color);
+}
+
+.reflection-section::before {
+  content: "\f059"; /* FontAwesome question-circle */
+}
+
+.prayer-section::before {
+  content: "\f684"; /* FontAwesome hands-praying */
+}
+
+/* ===== Navigation & Buttons ===== */
+.button-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.arrow-button,
+.icon-button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.arrow-button:hover,
+.icon-button:hover {
+  color: var(--hover-color);
+  transform: scale(1.1);
+}
+
+/* ===== Edit Button ===== */
+.edit-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--accent-color);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.edit-button:hover {
+  background: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* ===== Dark Mode Toggle Fix ===== */
+body.dark-mode .icon-button {
+  color: var(--accent-color);
+}
+
+/* ======================================================== */
+/*                 Upload Page Styles                       */
+/* ======================================================== */
+
+.upload-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  background-color: var(--light-container);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .upload-container {
+  background-color: var(--dark-container);
+  color: var(--dark-text);
+}
+
+.upload-container h1,
+.upload-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.upload-field label {
+  font-weight: bold;
+}
+
+.upload-field input,
+.upload-field select,
+.upload-field textarea {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: 'Georgia', serif;
+  color: var(--light-text);
+  background-color: #fff;
+}
+
+body.dark-mode .upload-field input,
+body.dark-mode .upload-field select,
+body.dark-mode .upload-field textarea {
+  background-color: #333;
+  color: #fff;
+}
+
+.upload-container button {
+  align-self: center;
+  background-color: var(--accent-color);
+  color: var(--light-text);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.upload-container button:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+}
