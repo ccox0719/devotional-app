@@ -25,16 +25,19 @@
 
 /* ===== Base Styles ===== */
 body {
+  
   background-color: var(--light-bg);
   color: var(--light-text);
   font-family: 'Georgia', serif;
   display: flex;
+  zoom: 1; /* ✅ Stops unnecessary scaling */
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 30px;
   transition: background-color 0.3s, color 0.3s;
 }
+
 
 /* ✅ Dark Mode */
 body.dark-mode {
@@ -49,7 +52,7 @@ body.dark-mode {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 900px;
+  max-width: 600px;
   padding: 20px;
   background-color: var(--light-container);
   border-radius: 8px;

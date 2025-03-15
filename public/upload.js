@@ -53,6 +53,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         reader.readAsText(file);
     });
+        // ✅ Route: Upload JSON file to `uploads/`
+        app.post("/upload", (req, res) => {
+            try {
+                const fileName = `devotional-${Date.now()}.json`; // ✅ Unique file name
+                const filePath = path.join(uploadsDir, fileName);
+
+                fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
+
+                console.log("✅ JSON successfully uploaded:", fileName);
+                res.json({ success: true, fileName });
+            } catch (error) {
+                console.error("❌ Error saving JSON:", error);
+                res.status(500).json({ error: "Server error saving JSON" });
+            }
 
     // ✅ Upload JSON File
     uploadButton.addEventListener("click", async () => {
@@ -150,3 +164,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadDevotionalOptions();
 });
+
