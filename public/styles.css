@@ -25,12 +25,10 @@
 
 /* ===== Base Styles ===== */
 body {
-  
   background-color: var(--light-bg);
   color: var(--light-text);
   font-family: 'Georgia', serif;
   display: flex;
-  zoom: 1; /* ✅ Stops unnecessary scaling */
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -38,21 +36,20 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-
 /* ✅ Dark Mode */
 body.dark-mode {
   background-color: var(--dark-bg);
   color: var(--dark-text);
 }
 
-/* ✅ Content Wrapper */
+/* ✅ Content Wrapper (Used on Main Devotional Page) */
 .content-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 900px;
   padding: 20px;
   background-color: var(--light-container);
   border-radius: 8px;
@@ -64,106 +61,82 @@ body.dark-mode .content-wrapper {
   background-color: var(--dark-container);
 }
 
-/* ===== Top Section: Title & Date ===== */
+/* ===== Top Section: Proper Centering & Dynamic Sizing ===== */
 .top-section {
-  display: flex;
-  flex-direction: column; /* Stack title and date vertically */
+  flex-direction: column; /* Stack elements vertically */
   align-items: center;
+  justify-content: center;
   width: 100%;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--accent-color); /* ✅ Thinner line */
-  margin-bottom: 20px;
+  max-width: 900px;
+  padding: 10px 0;
 }
 
-/* ----- Title Container ----- */
-.title-container {
+
+/* ✅ Date Container: Keeps Date Properly Sized & Centered */
+.date-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
+  margin-top: 15px; /* Space between title and date */
+}
+
+.date-box {
+  background: #fff;
+  color: var(--accent-color);
+  border: 3px solid var(--accent-color);
+  border-radius: 10px;
+  padding: 10px 15px;
   text-align: center;
-  width: 100%;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Centered Title */
+.day {
+  display: block;
+  font-size: 2.0rem;
+  font-weight: bold;
+}
+
+.month {
+  display: block;
+  font-size: 4.2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+
+/* ✅ Title Group: Centers Title & Subtitle Together */
+.title-container {
+  text-align: center;
+  margin-bottom: 15px; /* Adds space between title and date */
+}
+
+/* ✅ Title Auto-Sizing */
 #project-title {
   font-size: 3.8rem;
+  justify-content: center;
   font-weight: bold;
   text-transform: uppercase;
-  white-space: normal; /* Allow wrapping */
-  text-align: center;
-  max-width: 80%;
-  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
-/* Subtitle */
+/* ✅ Subtitle Auto-Sizing */
 .subtitle {
+  justify-content: center;
   font-style: italic;
   font-size: 1.5rem;
   color: var(--hover-color);
-  text-align: center;
-  max-width: 80%;
-  margin-bottom: 10px;
+  white-space: normal;  /* Allows wrapping */
+  overflow-wrap: break-word; /* Breaks long words if necessary */
+  text-align: left;          /* Adjust to left or center as needed */
+  max-width: 60%;
 }
 
-/* ===== Adjusted Date Styling (Moves It Up & Centers It Better) ===== */
-.date-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Georgia', serif;
-  background-color: var(--light-bg);
-  border-radius: 12px; /* ✅ Rounded box */
-  padding: 12px 18px; /* ✅ Better padding for spacing */
-  width: 100px; /* ✅ Fixed width */
-  height: 85px; /* ✅ Adjust height to balance space */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-  top: -10px;
-  bottom: 40px; /* ✅ Moves the box up slightly */
-  z-index: 10;
-}
-
-/* ✅ Day Styling */
-.day {
-  font-size: 2.5rem; /* ✅ Adjusted for better fit */
-  font-weight: 700;
-  color: var(--accent-color); /* ✅ Ensures correct text color */
-  text-align: center;
-  line-height: 1;
-}
-
-/* ✅ Month Styling */
-.month {
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--light-text-color); /* ✅ Improved contrast */
-  text-align: center;
-  margin-top: 2px; /* ✅ Small spacing below day */
-}
-/* ✅ Light Mode Date Background */
-.date-container {
-  background-color: var(--light-container); /* ✅ Softer look */
-}
-
-/* ===== Dark Mode Styling Adjustments ===== */
-body.dark-mode {
-  background-color: var(--dark-bg);
-  color: var(--dark-text);
-}
-
-/* ✅ Dark Mode Date Box */
-body.dark-mode .date-container {
-  background-color: var(--dark-container); /* ✅ Darker tone to blend well */
-  border: 1px solid var(--hover-color); /* ✅ Adds definition */
-}
-
-/* ✅ Dark Mode Month Text */
-body.dark-mode .month {
-  color: var(--container-text); /* ✅ Lighter to balance visibility */
-}
 /* ===== Passage Section ===== */
 .subtle-container {
   background-color: var(--light-container);
@@ -183,14 +156,14 @@ body.dark-mode .subtle-container {
   color: var(--dark-text);
 }
 
-/* Passage Reference */
+/* ✅ Passage Reference */
 #reference {
   color: var(--accent-color);
   font-weight: bold;
   font-size: 1.3rem;
 }
 
-/* Passage Text */
+/* ✅ Passage Text */
 .subtle-container p {
   font-size: 1rem;
   line-height: 1.6;
@@ -270,6 +243,7 @@ body.dark-mode .icon-button {
 
 /* ======================================================== */
 /*                 Upload Page Styles                       */
+/*  (Use these in upload.html to maintain consistency)      */
 /* ======================================================== */
 
 .upload-container {
@@ -316,9 +290,10 @@ body.dark-mode .upload-container {
   border-radius: 5px;
   font-family: 'Georgia', serif;
   color: var(--light-text);
-  background-color: #fff;
+  background-color: #fff; /* Adjust if you want a container-based color */
 }
 
+/* Adjust if using dark mode for inputs as well */
 body.dark-mode .upload-field input,
 body.dark-mode .upload-field select,
 body.dark-mode .upload-field textarea {

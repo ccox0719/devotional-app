@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/view/(.*)", "dest": "/view.html" },
+    { "src": "/api/(.*)", "dest": "/api/$1.js" }
+  ]
+}
