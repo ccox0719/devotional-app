@@ -39,11 +39,24 @@ uploadBtn.addEventListener('click', async () => {
     }
 
     // Step 2: Set as current devotional
-    const selectRes = await fetch('/api/select-devotional', {
+    const response = await fetch('/api/select-devotional', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ file_path: uploadData.path })
+      body: JSON.stringify({ filename: file.name }) // or whatever you’re sending
     });
+    
+    let result;
+    try {
+      result = await response.json();
+    } catch (err) {
+      const text = await response.text();
+      throw new Error(`Upload failed: ${text}`);
+    }
+    
+    if (!response.ok) {
+      throw new Error(result.error || 'Unknown server error');
+    }
+    
 
     if (!selectRes.ok) {
       const selectErr = await selectRes.json();
