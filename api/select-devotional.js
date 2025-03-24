@@ -2,8 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,   // <-- Problem 1
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_URL,               // ✅ Corrected env var
+  process.env.SUPABASE_SERVICE_ROLE_KEY   // ✅ Using the secure server-side key
 );
 
 export default async function handler(req, res) {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing filename' });
     }
 
-    // Do your Supabase logic here (e.g., log, fetch, etc.)
+    // Optional: Do something with Supabase if needed, like fetching metadata
 
     return res.status(200).json({ success: true });
 
