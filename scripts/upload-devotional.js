@@ -1,46 +1,62 @@
-import Papa from "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/+esm";
+import Papa from 'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/+esm';
 
-const uploadInput = document.getElementById("csvUpload");
-const status = document.getElementById("status");
+const csvInput = document.getElementById('csvInput');
+const uploadBtn = document.getElementById('uploadBtn');
+const status = document.getElementById('status');
 
-uploadInput.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+uploadBtn.addEventListener('click', async () => {
+  const file = csvInput.files[0];
+  if (!file) {
+    status.textContent = 'Please select a CSV file.';
+    return;
+  }
 
-  status.textContent = "Uploading...";
+  status.textContent = 'Parsing CSV...';
 
-  Papa.parse(file, {
-    header: true,
-    complete: async (results) => {
-      const json = results.data;
-      const filename = `devotional-${Date.now()}.json`;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const csv = e.target.result;
+    const parsed = Papa.parse(csv, {
+      header: true,
+      skipEmptyLines: true
+    });
 
-      try {
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename, content: json }),
-        });
+    const json = parsed.data;
+    const filename = `${file.name.replace('.csv', '')}-${Date.now()}.json`;
 
-        if (!uploadRes.ok) throw new Error("Upload failed");
+    // Step 1: Upload to Supabase Storage
+    status.textContent = 'Uploading...';
+    const uploadRes = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename, content: json })
+    });
 
-        const selectRes = await fetch("/api/select-devotional", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ file_path: `json/${filename}` }),
-        });
-
-        if (!selectRes.ok) throw new Error("Selection failed");
-
-        status.textContent = "✅ Upload & selection successful!";
-      } catch (err) {
-        console.error(err);
-        status.textContent = "❌ Upload failed: " + err.message;
-      }
-    },
-    error: (err) => {
-      console.error("PapaParse error:", err);
-      status.textContent = "❌ CSV parse failed.";
+    const uploadData = await uploadRes.json();
+    if (!uploadRes.ok) {
+      status.textContent = `Upload failed: ${uploadData.error}`;
+      return;
     }
-  });
+
+    // Step 2: Set as current devotional
+    const selectRes = await fetch('/api/select-devotional', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file_path: uploadData.path })
+    });
+
+    if (!selectRes.ok) {
+      const selectErr = await selectRes.json();
+      status.textContent = `Failed to set selected: ${selectErr.error}`;
+      return;
+    }
+
+    // Step 3: Redirect to main page
+    status.textContent = 'Upload successful! Redirecting...';
+    setTimeout(() => {
+      window.location.href = '/index.html';
+    }, 1000);
+  };
+
+  reader.readAsText(file);
 });
