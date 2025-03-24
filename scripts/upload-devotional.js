@@ -45,21 +45,21 @@ uploadBtn.addEventListener('click', async () => {
       body: JSON.stringify({ filename: file.name })
     });
     
-    let responseBody;
+    const responseClone = response.clone(); // clone BEFORE reading
+    
+    let data;
     try {
-      // Attempt to parse JSON
-      responseBody = await response.json();
-    } catch (jsonErr) {
-      // If that fails, get plain text once and throw
-      const text = await response.clone().text();  // <--- use clone to read stream again
-      throw new Error(`Server returned non-JSON response: ${text}`);
+      data = await response.json();
+    } catch (err) {
+      const text = await responseClone.text();
+      console.error('Non-JSON error:', text);
+      throw new Error('Invalid JSON response: ' + text);
     }
     
     if (!response.ok) {
-      throw new Error(responseBody.error || 'Unknown server error');
+      throw new Error(data.error || 'Unknown server error');
     }
     
-
     // Step 3: Redirect to main page
     status.textContent = 'Upload successful! Redirecting...';
     setTimeout(() => {
