@@ -1,44 +1,42 @@
-const container = document.getElementById('devotional-container');
+import Papa from "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/+esm";
 
-// Step 1: Get today's date
-const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+const uploadInput = document.getElementById("csvUpload");
+const status = document.getElementById("status");
 
-async function loadDevotional() {
-  container.innerHTML = '<p>Loading...</p>';
+uploadInput.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-  // Step 2: Get selected file path from server
-  const selectedRes = await fetch('/api/selected-devotional');
-  const { file_path } = await selectedRes.json();
+  status.textContent = "Uploading...";
 
-  if (!file_path) {
-    container.innerHTML = '<p>No devotional selected.</p>';
-    return;
-  }
+  Papa.parse(file, {
+    header: true,
+    complete: async (results) => {
+      const json = results.data;
+      const filename = `devotional-${Date.now()}.json`;
 
-  // Step 3: Construct public Supabase Storage URL
-  const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || import.meta.env?.NEXT_PUBLIC_SUPABASE_URL;
-  const fileUrl = `${supabaseUrl}/storage/v1/object/public/devotionals/${file_path}`;
+      try {
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename, content: json }),
+        });
 
-  // Step 4: Fetch JSON file
-  const response = await fetch(fileUrl);
-  const json = await response.json();
+        if (!uploadRes.ok) throw new Error("Upload failed");
 
-  // Step 5: Find devotional for today
-  const entry = json.find(d => d.date === today);
-  if (!entry) {
-    container.innerHTML = `<p>No entry found for today (${today}).</p>`;
-    return;
-  }
+        const selectRes = await fetch("/api/select-devotional", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ file_path: `json/${filename}` }),
+        });
 
-  // Step 6: Render devotional
-  container.innerHTML = `
-    <h2>${entry.title || today}</h2>
-    <p><strong>Scripture:</strong> ${entry.scripture || ''}</p>
-    <p>${entry.content || ''}</p>
-    <hr />
-    <p><strong>Reflection:</strong> ${entry.reflection || ''}</p>
-    <p><strong>Prayer:</strong> ${entry.prayer || ''}</p>
-  `;
-}
+        if (!selectRes.ok) throw new Error("Selection failed");
 
-loadDevotional();
+        status.textContent = "Upload & selection successful!";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Something went wrong.";
+      }
+    },
+  });
+});
