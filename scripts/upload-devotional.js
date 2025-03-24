@@ -42,27 +42,23 @@ uploadBtn.addEventListener('click', async () => {
     const response = await fetch('/api/select-devotional', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename: file.name }) // or whatever you’re sending
+      body: JSON.stringify({ filename: file.name })
     });
     
-    let result;
+    let responseBody;
     try {
-      result = await response.json();
-    } catch (err) {
-      const text = await response.text();
-      throw new Error(`Upload failed: ${text}`);
+      // Attempt to parse JSON
+      responseBody = await response.json();
+    } catch (jsonErr) {
+      // If that fails, get plain text once and throw
+      const text = await response.clone().text();  // <--- use clone to read stream again
+      throw new Error(`Server returned non-JSON response: ${text}`);
     }
     
     if (!response.ok) {
-      throw new Error(result.error || 'Unknown server error');
+      throw new Error(responseBody.error || 'Unknown server error');
     }
     
-
-    if (!selectRes.ok) {
-      const selectErr = await selectRes.json();
-      status.textContent = `Failed to set selected: ${selectErr.error}`;
-      return;
-    }
 
     // Step 3: Redirect to main page
     status.textContent = 'Upload successful! Redirecting...';
