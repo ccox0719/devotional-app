@@ -65,18 +65,18 @@ setActiveButton.addEventListener('click', async () => {
   }
   
   // ✅ Get the new plan ID
-  const planId = insertResult[0].id;
-  
-  // 🔁 Upsert to active_plan
-  const { error: activeError } = await supabase
-    .from('active_plan')
-    .upsert({ id: 'singleton', plan_id: planId }); // You can use a fixed ID
-  
-  if (activeError) {
-    console.error('❌ Failed to set active plan:', activeError);
-    alert('❌ Could not update active plan.');
-    return;
-  }
+// After inserting new plan
+const planId = insertResult[0].id;
+
+const { error: activeError } = await supabase
+  .from('active_plan')
+  .upsert({ id: 'singleton', plan_id: planId });
+
+if (activeError) {
+  console.error('❌ Failed to set active plan:', activeError);
+  alert('❌ Could not update active plan.');
+  return;
+}
   
   alert(`✅ Plan "${title}" uploaded and set as active.`);
   window.location.href = 'index.html';

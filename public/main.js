@@ -1,5 +1,14 @@
 import { supabase } from './client.js';
+async function fetchESVText(reference) {
+  const response = await fetch(`https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-footnotes=false&include-headings=false`, {
+    headers: {
+      Authorization: '9328c9005b4622bc622b4f55a75a90a20e69003f'
+    }
+  });
 
+  const json = await response.json();
+  return json.passages?.[0] || 'Scripture not found.';
+}
 async function loadPlan() {
   // 1. Get active plan ID
   const { data: active, error: activeError } = await supabase
@@ -27,10 +36,9 @@ async function loadPlan() {
   document.getElementById('plan-title').innerText = plan.title;
   document.getElementById('plan-subtitle').innerText = plan.subtitle;
 
-  // 3. Format today's date like "1/1/2025"
   const today = new Date();
   const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-
+  
   // 4. Match today's entry
   const todayEntry = plan.data.find(entry => entry.Date === formattedDate);
 
@@ -40,7 +48,9 @@ async function loadPlan() {
   }
 
   // 5. Display it
-  document.getElementById('content').innerText = todayEntry.Reference || '';
+  const passage = await fetchESVText(todayEntry.Reference || '');
+  document.getElementById('plan-title').innerText = `${plan.title} — ${todayEntry.Reference}`;
+  document.getElementById('content').innerText = passage;
   document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
   document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
 }
