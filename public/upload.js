@@ -46,21 +46,39 @@ setActiveButton.addEventListener('click', async () => {
     .map((t) => t.trim().toLowerCase())
     .filter(Boolean);
 
-  const { data, error } = await supabase.from('devotional_plans').insert([
-    {
-      title,
-      subtitle,
-      data: parsedData,
-      tags: tagArray,
-    },
-  ]);
-
-  if (error) {
-    console.error('❌ Supabase insert error:', error);
+    const { data: insertResult, error: insertError } = await supabase
+    .from('devotional_plans')
+    .insert([
+      {
+        title,
+        subtitle,
+        data: parsedData,
+        tags: tagArray,
+      },
+    ])
+    .select(); // Return the inserted row
+  
+  if (insertError || !insertResult || insertResult.length === 0) {
+    console.error('❌ Supabase insert error:', insertError);
     alert('❌ Failed to upload plan. See console for details.');
-  } else {
-    alert(`✅ Plan "${title}" uploaded successfully!`);
-    console.log('📦 Supabase insert success:', data);
-    window.location.href = 'index.html'; // ⬅️ Redirect to main screen
+    return;
   }
+  
+  // ✅ Get the new plan ID
+  const planId = insertResult[0].id;
+  
+  // 🔁 Upsert to active_plan
+  const { error: activeError } = await supabase
+    .from('active_plan')
+    .upsert({ id: 'singleton', plan_id: planId }); // You can use a fixed ID
+  
+  if (activeError) {
+    console.error('❌ Failed to set active plan:', activeError);
+    alert('❌ Could not update active plan.');
+    return;
+  }
+  
+  alert(`✅ Plan "${title}" uploaded and set as active.`);
+  window.location.href = 'index.html';
+  
 });
