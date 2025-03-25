@@ -61,5 +61,6 @@ setActiveButton.addEventListener('click', async () => {
   } else {
     alert(`✅ Plan "${title}" uploaded successfully!`);
     console.log('📦 Supabase insert success:', data);
+    window.location.href = 'index.html'; // ⬅️ Redirect to main screen
   }
 });
