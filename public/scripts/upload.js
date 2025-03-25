@@ -1,7 +1,7 @@
 
 // scripts/upload.js
-import { parseCSV, savePlan, setActivePlan } from '../utils/storage.js';
-import supabase from '../supabase/client.js';
+import { parseCSV, savePlan, setActivePlan } from '/utils/storage.js';
+import supabase from '/supabase/client.js';
 
 document.getElementById('csv-upload').addEventListener('change', async (e) => {
   const file = e.target.files[0];

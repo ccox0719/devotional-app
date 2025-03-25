@@ -1,7 +1,7 @@
 
 // scripts/main.js
-import { getEntryForDate } from '../utils/getentry.js';
-import { getActivePlan } from '../utils/storage.js';
+import { getEntryForDate } from '/utils/getentry.js';
+import { getActivePlan } from '/utils/storage.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   let fileName = new URLSearchParams(window.location.search).get('plan');

@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Plan</title>
+  <link rel="stylesheet" href="/public/styles/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Upload</h1>
+    <p class="subtitle">upload bible plan<br>csv</p>
+
+    <label class="upload-icon">
+      <input type="file" id="csv-upload" accept=".csv" hidden />
+      <div class="upload-button">📤</div>
+    </label>
+
+    <input type="text" id="title-input" placeholder="Plan Title" />
+    <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
+
+    <h2>Select Active Devotional</h2>
+    <ul id="plan-list"></ul>
+
+    <button id="set-active">Set Active</button>
+
+    <div class="nav-bar">
+      <button onclick="window.location.href='/index.html'">←</button>
+      <button id="theme-toggle">🌙</button>
+      <button disabled>→</button>
+    </div>
+  </div>
+
+  <script src="/public/scripts/upload.js" type="module"></script>
+</body>
+</html>

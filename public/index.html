@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Devotional</title>
+  <link rel="stylesheet" href="/public/styles/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 id="plan-title" class="title">Title</h1>
+    <p id="plan-subtitle" class="subtitle">subtitle description of plan</p>
+
+    <div class="date-badge" id="date-badge">11<br><span>MAR</span></div>
+
+    <div id="content" class="devotional-text">
+      Loading today's devotional...
+    </div>
+
+    <div class="question-prayer">
+      <h2>Question</h2>
+      <p id="question">—</p>
+      <h2>Prayer</h2>
+      <p id="prayer">—</p>
+    </div>
+
+    <div class="nav-bar">
+      <button id="prev-day">←</button>
+      <button id="theme-toggle">🌙</button>
+      <button id="next-day">→</button>
+    </div>
+
+    <div class="nav-bar">
+      <button onclick="window.location.href='/upload.html'">📤 Upload Plan</button>
+    </div>
+  </div>
+
+  <script src="/public/scripts/main.js" type="module"></script>
+</body>
+</html>
