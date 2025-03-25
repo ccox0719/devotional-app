@@ -1,37 +1,48 @@
+import { supabase } from './client.js';
 
-// scripts/main.js
-import { getEntryForDate } from '/utils/getentry.js';
-import { getActivePlan } from '/utils/storage.js';
+async function loadPlan() {
+  // 1. Get active plan ID
+  const { data: active, error: activeError } = await supabase
+    .from('active_plan')
+    .select('plan_id')
+    .single();
 
-document.addEventListener('DOMContentLoaded', async () => {
-  let fileName = new URLSearchParams(window.location.search).get('plan');
-
-  if (!fileName) {
-    fileName = await getActivePlan();
-    if (!fileName) {
-      document.getElementById('content').innerText = 'No active plan found. Go to Upload page.';
-      return;
-    }
+  if (activeError || !active) {
+    document.getElementById('content').innerText = 'No active plan found.';
+    return;
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-  const entry = await getEntryForDate(fileName, today);
+  // 2. Load the plan data
+  const { data: plan, error: planError } = await supabase
+    .from('devotional_plans')
+    .select('title, subtitle, data')
+    .eq('id', active.plan_id)
+    .single();
 
-  if (entry) {
-    document.getElementById('plan-title').innerText = entry.title || '';
-    document.getElementById('plan-subtitle').innerText = entry.subtitle || '';
-    document.getElementById('date-badge').innerHTML = formatDateBadge(today);
-    document.getElementById('content').innerText = entry.content;
-    document.getElementById('question').innerText = entry.question;
-    document.getElementById('prayer').innerText = entry.prayer;
-  } else {
-    document.getElementById('content').innerText = 'No entry for today.';
+  if (planError || !plan) {
+    document.getElementById('content').innerText = 'Error loading devotional.';
+    return;
   }
-});
 
-function formatDateBadge(dateStr) {
-  const date = new Date(dateStr);
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
-  return `${day}<br><span>${month}</span>`;
+  document.getElementById('plan-title').innerText = plan.title;
+  document.getElementById('plan-subtitle').innerText = plan.subtitle;
+
+  // 3. Format today's date like "1/1/2025"
+  const today = new Date();
+  const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+
+  // 4. Match today's entry
+  const todayEntry = plan.data.find(entry => entry.Date === formattedDate);
+
+  if (!todayEntry) {
+    document.getElementById('content').innerText = `No devotional for ${formattedDate}.`;
+    return;
+  }
+
+  // 5. Display it
+  document.getElementById('content').innerText = todayEntry.Reference || '';
+  document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
+  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
 }
+
+loadPlan();
