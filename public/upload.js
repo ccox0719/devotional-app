@@ -6,10 +6,13 @@ const setActiveButton = document.getElementById('set-active');
 const titleInput = document.getElementById('title-input');
 const subtitleInput = document.getElementById('subtitle-input');
 const tagsInput = document.getElementById('tags-input');
+const dropdown = document.getElementById('plan-dropdown');
+const activateBtn = document.getElementById('activate-plan');
 
 let parsedData = null;
 let uploadedFileName = null;
 
+// Handle file upload and parse CSV
 fileInput.addEventListener('change', async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -27,6 +30,7 @@ fileInput.addEventListener('change', async (event) => {
   }
 });
 
+// Handle uploading new plan
 setActiveButton.addEventListener('click', async () => {
   const title = titleInput.value.trim();
   const subtitle = subtitleInput.value.trim();
@@ -46,39 +50,77 @@ setActiveButton.addEventListener('click', async () => {
     .map((t) => t.trim().toLowerCase())
     .filter(Boolean);
 
-    const { data: insertResult, error: insertError } = await supabase
+  const { data: insertResult, error: insertError } = await supabase
     .from('devotional_plans')
-    .insert([
-      {
-        title,
-        subtitle,
-        data: parsedData,
-        tags: tagArray,
-      },
-    ])
-    .select(); // Return the inserted row
-  
+    .insert([{ title, subtitle, data: parsedData, tags: tagArray }])
+    .select();
+
   if (insertError || !insertResult || insertResult.length === 0) {
     console.error('❌ Supabase insert error:', insertError);
-    alert('❌ Failed to upload plan. See console for details.');
+    alert('❌ Failed to upload plan.');
     return;
   }
-  
-  // ✅ Get the new plan ID
-// After inserting new plan
-const planId = insertResult[0].id;
 
-const { error: activeError } = await supabase
-  .from('active_plan')
-  .upsert({ id: 'singleton', plan_id: planId });
+  const planId = insertResult[0].id;
+  const { error: activeError } = await supabase
+    .from('active_plan')
+    .upsert({ id: 'singleton', plan_id: planId });
 
-if (activeError) {
-  console.error('❌ Failed to set active plan:', activeError);
-  alert('❌ Could not update active plan.');
-  return;
-}
-  
+  if (activeError) {
+    console.error('❌ Failed to set active plan:', activeError);
+    alert('❌ Could not update active plan.');
+    return;
+  }
+
   alert(`✅ Plan "${title}" uploaded and set as active.`);
-  window.location.href = 'index.html';
-  
+  loadPlansDropdown(); // Refresh dropdown
 });
+
+// Load all plans into the dropdown
+async function loadPlansDropdown() {
+  dropdown.innerHTML = '<option>Loading...</option>';
+
+  const { data: plans, error: fetchError } = await supabase
+    .from('devotional_plans')
+    .select('id, title');
+
+  const { data: active, error: activeError } = await supabase
+    .from('active_plan')
+    .select('plan_id')
+    .single();
+
+  if (fetchError || !plans) {
+    dropdown.innerHTML = '<option>Error loading plans</option>';
+    console.error(fetchError);
+    return;
+  }
+
+  dropdown.innerHTML = '';
+  plans.forEach(plan => {
+    const option = document.createElement('option');
+    option.value = plan.id;
+    option.textContent = plan.title;
+    if (active?.plan_id === plan.id) {
+      option.selected = true;
+    }
+    dropdown.appendChild(option);
+  });
+}
+
+// Handle switching the active plan
+activateBtn.addEventListener('click', async () => {
+  const selectedId = dropdown.value;
+  const { error } = await supabase
+    .from('active_plan')
+    .upsert({ id: 'singleton', plan_id: selectedId });
+
+  if (error) {
+    alert('❌ Failed to set active plan.');
+    console.error(error);
+  } else {
+    alert('✅ Active plan updated.');
+  }
+});
+
+// Run on page load
+loadPlansDropdown();
