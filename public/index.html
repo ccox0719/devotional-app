@@ -9,32 +9,41 @@
 </head>
 <body>
   <div class="container">
+    <button class="menu-button" onclick="window.location.href='/upload.html'">
+      ☰
+    </button>    
     <h1 id="plan-title" class="title">Title</h1>
     <p id="plan-subtitle" class="subtitle">subtitle description of plan</p>
 
-    <div class="date-badge" id="date-badge">11<br><span>MAR</span></div>
+    <div class="center-wrapper">
+      <div class="date-badge">
+        <span class="date-number">11</span>
+        <span class="date-month">MAR</span>
+      </div>
+    </div>
+      
 
     <div id="content" class="devotional-text">
       Loading today's devotional...
     </div>
 
     <div class="question-prayer">
-      <h2>Question</h2>
+      <img src="question.svg" alt="Question" class="icon-heading" />
       <p id="question">—</p>
-      <h2>Prayer</h2>
+      <img src="prayer.svg" alt="Prayer" class="icon-heading" />
       <p id="prayer">—</p>
     </div>
+    
 
     <div class="nav-bar">
       <button id="prev-day">←</button>
-      <button id="theme-toggle">🌙</button>
+      <button id="theme-toggle" aria-label="Toggle Theme">
+        <img src="moon.svg" alt="Toggle Theme" class="icon-button" />
+      </button>      
       <button id="next-day">→</button>
     </div>
-
-    <div class="nav-bar">
-      <button onclick="window.location.href='/upload.html'">📤 Upload Plan</button>
-    </div>
   </div>
+  <script src="theme.js" type="module"></script>
   <script src="main.js" type="module"></script>
   <script src="storage.js" type="module"></script> <!-- If needed -->  
 </body>
