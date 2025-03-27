@@ -1,6 +1,23 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 import { supabase } from './client.js';
 async function fetchESVText(reference) {
   const response = await fetch(`https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-footnotes=false&include-headings=false`, {
+=======
+>>>>>>> 4fbd151
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabase = createClient(
+      'https://sggxzlhpdkqjlepbwdqf.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI'
+);
+async function fetchESVText(reference) {
+  const response = await fetch(`https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-verse-numbers=false&include-footnotes=false&include-headings=false`, {
+<<<<<<< HEAD
+=======
+>>>>>>> ed346ec (Your commit message)
+>>>>>>> 4fbd151
     headers: {
       Authorization: '9328c9005b4622bc622b4f55a75a90a20e69003f'
     }
@@ -48,11 +65,27 @@ async function loadPlan() {
   }
 
   // 5. Display it
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
   const passage = await fetchESVText(todayEntry.Reference || '');
   document.getElementById('plan-title').innerText = `${plan.title} — ${todayEntry.Reference}`;
   document.getElementById('content').innerText = passage;
   document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
   document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
+=======
+>>>>>>> 4fbd151
+  const passage = await fetchESVText(todayEntry.Reference || '');  
+  document.getElementById('plan-title').innerText = plan.title;
+  document.getElementById('plan-subtitle').innerText = plan.subtitle || '';
+  document.getElementById('content').innerHTML = `<p>${passage}</p>`;
+  document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
+  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
+  
+<<<<<<< HEAD
+=======
+>>>>>>> ed346ec (Your commit message)
+>>>>>>> 4fbd151
 }
 
 loadPlan();
