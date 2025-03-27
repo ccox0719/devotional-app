@@ -1,7 +1,9 @@
 import { supabase } from './client.js';
 async function fetchESVText(reference) {
-  const response = await fetch(`https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-footnotes=false&include-headings=false`, {
-    headers: {
+  const response = await fetch(
+    `https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-verse-numbers=false&include-footnotes=false&include-headings=false&include-passage-references=false&indent-paragraphs=0`,
+    {
+      headers: {
       Authorization: '9328c9005b4622bc622b4f55a75a90a20e69003f'
     }
   });
@@ -49,10 +51,10 @@ async function loadPlan() {
 
   // 5. Display it
   const passage = await fetchESVText(todayEntry.Reference || '');
-  document.getElementById('plan-title').innerText = plan.title;
+  document.getElementById('plan-title').innerText = `${plan.title} — ${todayEntry.Reference}`;
   document.getElementById('content').innerText = passage;
   document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
-  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';  
+  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
 }
 
 loadPlan();
