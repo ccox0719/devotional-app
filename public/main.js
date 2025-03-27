@@ -49,10 +49,10 @@ async function loadPlan() {
 
   // 5. Display it
   const passage = await fetchESVText(todayEntry.Reference || '');
-  document.getElementById('plan-title').innerText = `${plan.title} — ${todayEntry.Reference}`;
+  document.getElementById('plan-title').innerText = plan.title;
   document.getElementById('content').innerText = passage;
   document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
-  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
+  document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';  
 }
 
 loadPlan();
