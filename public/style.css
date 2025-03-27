@@ -4,13 +4,8 @@
   --text: #1e1e1e;
   --accent: #f97316;
   --overlay-bg: rgba(0, 0, 0, 0.03);
-  --font-main: 'Montserrat', sans-serif;
-  --font-heading: 'Libre Baskerville', serif;
   --font-main: 'Georgia', serif;
   --font-accent: 'Inter', sans-serif;
-  --font-main: 'Montserrat', sans-serif;
-  --font-heading: 'Libre Baskerville', serif;
->>>>>>> 4fbd151
 }
 
 body.dark-mode {
@@ -40,15 +35,8 @@ body {
   border-radius: 1rem;
 }
 
-.title, h1, h2 {
-  font-family: var(--font-heading);
-  font-size: 2.8rem;
 .title {
   font-size: 2.2rem;
-.title, h1, h2 {
-  font-family: var(--font-heading);
-  font-size: 2.8rem;
->>>>>>> 4fbd151
   font-weight: bold;
   color: var(--accent);
   margin-bottom: 0.5rem;
@@ -60,21 +48,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-  font-family: var(--font-main);
-  font-size: 1.2rem;
-  text-align: center;
-  font-family: var(--font-accent);
-  margin-bottom: 1.8rem;
-}
-#content p {
-  font-family: var(--font-heading);
-  font-size: .7rem;
-  font-weight: normal;
-  text-align: center;
-  font-family: var(--font-accent);
-  margin-bottom: 1.8rem;
-}
->>>>>>> 4fbd151
 .date-badge {
   display: flex;
   flex-direction: column;
@@ -118,10 +91,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
-  text-align: center;
   text-align: left;
-  text-align: center;
->>>>>>> 4fbd151
   background: var(--overlay-bg);
   border-radius: 1rem;
   padding: 1rem;
@@ -275,4 +245,3 @@ ul#plan-list li {
   align-items: center;
 }
 
->>>>>>> 4fbd151
