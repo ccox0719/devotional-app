@@ -1,3 +1,6 @@
 # Local Netlify folder
 .netlify
+<<<<<<< HEAD
 block.txt
+=======
+>>>>>>> 4fbd151

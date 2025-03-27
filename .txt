@@ -1,0 +1,9 @@
+git add .
+git commit -m "Your commit message"
+git push
+netlify deploy --prod
+
+git checkout main
+git fetch origin
+git reset --hard origin/main
+git clean -fd
