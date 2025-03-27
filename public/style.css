@@ -4,10 +4,7 @@
   --text: #1e1e1e;
   --accent: #f97316;
   --overlay-bg: rgba(0, 0, 0, 0.03);
-
-  /* Font stacks */
-  --font-main: 'Libre Baskerville', serif;
-  --font-heading: 'Montserrat', sans-serif;
+  --font-main: 'Georgia', serif;
   --font-accent: 'Inter', sans-serif;
 }
 
@@ -38,35 +35,19 @@ body {
   border-radius: 1rem;
 }
 
-/* Heading styles */
-.title,
-h1,
-h2 {
-  font-family: var(--font-heading);
+.title {
   font-size: 2.2rem;
   font-weight: bold;
   color: var(--accent);
   margin-bottom: 0.5rem;
 }
 
-/* Subheading + general text */
-.subtitle,
-p {
-  font-family: var(--font-accent);
-}
-
 .subtitle {
   font-size: 1.2rem;
+  font-family: var(--font-accent);
   margin-bottom: 1.5rem;
 }
 
-#content p {
-  font-size: 0.9rem;
-  text-align: center;
-  margin-bottom: 1.8rem;
-}
-
-/* Date badge */
 .date-badge {
   display: flex;
   flex-direction: column;
@@ -98,18 +79,19 @@ p {
   margin-top: 0.2rem;
 }
 
-/* In case there are extra spans inside the badge */
+
 .date-badge span:not(.date-number):not(.date-month) {
   font-size: 1.1rem;
   display: flex;
   font-weight: normal;
 }
 
+
 .devotional-text {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
-  text-align: center;
+  text-align: left;
   background: var(--overlay-bg);
   border-radius: 1rem;
   padding: 1rem;
@@ -137,7 +119,6 @@ input[type="text"] {
   border-radius: 0.5rem;
   border: none;
   font-size: 1rem;
-  font-family: var(--font-accent);
 }
 
 button,
@@ -189,9 +170,11 @@ button:disabled {
   color: var(--accent);
 }
 
+
 #theme-toggle:hover {
   transform: scale(1.1);
 }
+
 
 ul#plan-list {
   list-style-type: none;
@@ -210,7 +193,6 @@ ul#plan-list li {
   font-size: 1rem;
   width: 100%;
 }
-
 .icon-heading {
   width: 1.8rem;
   height: 1.8rem;
@@ -238,7 +220,6 @@ ul#plan-list li {
 .menu-button:hover {
   transform: scale(1.1);
 }
-
 .icon-button {
   width: 1.8rem;
   height: 1.8rem;
@@ -263,3 +244,4 @@ ul#plan-list li {
   justify-content: center;
   align-items: center;
 }
+
