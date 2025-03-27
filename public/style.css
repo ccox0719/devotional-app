@@ -4,17 +4,12 @@
   --text: #1e1e1e;
   --accent: #f97316;
   --overlay-bg: rgba(0, 0, 0, 0.03);
-<<<<<<< HEAD
   --font-main: 'Montserrat', sans-serif;
   --font-heading: 'Libre Baskerville', serif;
-=======
-<<<<<<< HEAD
   --font-main: 'Georgia', serif;
   --font-accent: 'Inter', sans-serif;
-=======
   --font-main: 'Montserrat', sans-serif;
   --font-heading: 'Libre Baskerville', serif;
->>>>>>> ed346ec (Your commit message)
 >>>>>>> 4fbd151
 }
 
@@ -45,19 +40,14 @@ body {
   border-radius: 1rem;
 }
 
-<<<<<<< HEAD
 .title, h1, h2 {
   font-family: var(--font-heading);
   font-size: 2.8rem;
-=======
-<<<<<<< HEAD
 .title {
   font-size: 2.2rem;
-=======
 .title, h1, h2 {
   font-family: var(--font-heading);
   font-size: 2.8rem;
->>>>>>> ed346ec (Your commit message)
 >>>>>>> 4fbd151
   font-weight: bold;
   color: var(--accent);
@@ -65,16 +55,11 @@ body {
 }
 
 .subtitle {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
   font-size: 1.2rem;
   font-family: var(--font-accent);
   margin-bottom: 1.5rem;
 }
 
-=======
->>>>>>> 4fbd151
   font-family: var(--font-main);
   font-size: 1.2rem;
   text-align: center;
@@ -89,9 +74,6 @@ body {
   font-family: var(--font-accent);
   margin-bottom: 1.8rem;
 }
-<<<<<<< HEAD
-=======
->>>>>>> ed346ec (Your commit message)
 >>>>>>> 4fbd151
 .date-badge {
   display: flex;
@@ -136,14 +118,9 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
-<<<<<<< HEAD
   text-align: center;
-=======
-<<<<<<< HEAD
   text-align: left;
-=======
   text-align: center;
->>>>>>> ed346ec (Your commit message)
 >>>>>>> 4fbd151
   background: var(--overlay-bg);
   border-radius: 1rem;
@@ -297,10 +274,5 @@ ul#plan-list li {
   justify-content: center;
   align-items: center;
 }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 
-=======
->>>>>>> ed346ec (Your commit message)
 >>>>>>> 4fbd151
