@@ -3,7 +3,27 @@ git commit -m "Your commit message"
 git push
 netlify deploy --prod
 
-git checkout main
-git fetch origin
-git reset --hard origin/main
-git clean -fd
+
+Start and End Workflow
+🏁 1. Start your session (at home or work)
+cd devotional-app   # or wherever your project lives
+git stash           # save uncommitted changes just in case
+git checkout main   # make sure you're on the right branch
+git pull origin main
+git stash pop       # recover any local changes
+
+💾 2. Make your changes
+Edit files, test, do your thing.
+
+🚀 3. End your session with a clean push
+git add .
+git commit -m "Update: finished X, started Y"
+git push origin main
+
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabase = createClient(
+      'https://sggxzlhpdkqjlepbwdqf.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI'
+);

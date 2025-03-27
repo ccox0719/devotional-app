@@ -1,5 +1,11 @@
 import { parseCSV } from './csvParser.js';
-import { supabase } from './client.js';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabase = createClient(
+      'https://sggxzlhpdkqjlepbwdqf.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI'
+);
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
 
 const fileInput = document.getElementById('csv-upload');
 const setActiveButton = document.getElementById('set-active');
