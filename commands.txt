@@ -1,4 +1,0 @@
-git add .
-git commit -m "Update project files and dependencies"
-git push origin main
-vercel --prod

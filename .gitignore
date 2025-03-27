@@ -1,5 +1,3 @@
-# .gitignore
-.env
-.env.local
-.env.*.local
-.vercel
+# Local Netlify folder
+.netlify
+block.txt
