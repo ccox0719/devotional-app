@@ -1,4 +1,5 @@
 import { parseCSV } from './csvParser.js';
+import supabase from './utils/supabaseClient.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('csv-upload');

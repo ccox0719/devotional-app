@@ -1,8 +1,5 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
-window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
-const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+import supabase from './utils/supabaseClient.js';
 
 async function fetchESVText(reference) {
   const response = await fetch(

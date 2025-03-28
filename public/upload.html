@@ -17,6 +17,10 @@
     <h1 class="title">Upload</h1>
     <p class="subtitle">upload bible plan<br>csv</p>
 
+    <input type="text" id="title-input" placeholder="Plan Title" />
+    <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
+    <input type="text" id="tags-input" placeholder="Tags (comma separated)" />
+
     <label class="upload-icon">
       <input type="file" id="csv-upload" accept=".csv" hidden />
       <div class="upload-button">📤</div>
@@ -30,12 +34,7 @@
     <h3>Choose Accent Color</h3>
     <input type="color" id="accent-color-picker" />
     
-    <input type="text" id="title-input" placeholder="Plan Title" />
-    <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
-    <input type="text" id="tags-input" placeholder="Tags (comma separated)" />
-
     <h2>Select Active Devotional</h2>
-    <select id="plan-dropdown"></select>
     <button id="set-active">Set Selected Plan Active</button>
     <ul id="plan-list"></ul>
 
