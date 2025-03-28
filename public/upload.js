@@ -1,126 +1,113 @@
 import { parseCSV } from './csvParser.js';
-import { supabase } from './client.js';
 
-const fileInput = document.getElementById('csv-upload');
-const setActiveButton = document.getElementById('set-active');
-const titleInput = document.getElementById('title-input');
-const subtitleInput = document.getElementById('subtitle-input');
-const tagsInput = document.getElementById('tags-input');
-const dropdown = document.getElementById('plan-dropdown');
-const activateBtn = document.getElementById('activate-plan');
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('csv-upload');
+  const titleInput = document.getElementById('title-input');
+  const subtitleInput = document.getElementById('subtitle-input');
+  const setActiveBtn = document.getElementById('set-active');
+  const planList = document.getElementById('plan-list');
 
-let parsedData = null;
-let uploadedFileName = null;
+  let parsedData = null;
+  let uploadedPlanId = null;
 
-// Handle file upload and parse CSV
-fileInput.addEventListener('change', async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  // Handle CSV file selection
+  fileInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  uploadedFileName = file.name;
-  document.querySelector('.upload-button').textContent = '📤 ' + uploadedFileName;
+    const text = await file.text();
+    parsedData = parseCSV(text);
 
-  const text = await file.text();
-  parsedData = parseCSV(text);
-
-  if (!parsedData || parsedData.length === 0) {
-    alert('❌ Failed to parse CSV. Please check the format.');
-  } else {
-    console.log('✅ CSV parsed successfully:', parsedData);
-  }
-});
-
-// Handle uploading new plan
-setActiveButton.addEventListener('click', async () => {
-  const title = titleInput.value.trim();
-  const subtitle = subtitleInput.value.trim();
-  const tags = tagsInput.value;
-
-  if (!parsedData) {
-    alert('Please upload a CSV file first.');
-    return;
-  }
-  if (!title || !subtitle) {
-    alert('Please enter a title and subtitle.');
-    return;
-  }
-
-  const tagArray = tags
-    .split(',')
-    .map((t) => t.trim().toLowerCase())
-    .filter(Boolean);
-
-  const { data: insertResult, error: insertError } = await supabase
-    .from('devotional_plans')
-    .insert([{ title, subtitle, data: parsedData, tags: tagArray }])
-    .select();
-
-  if (insertError || !insertResult || insertResult.length === 0) {
-    console.error('❌ Supabase insert error:', insertError);
-    alert('❌ Failed to upload plan.');
-    return;
-  }
-
-  const planId = insertResult[0].id;
-  const { error: activeError } = await supabase
-    .from('active_plan')
-    .upsert({ id: 'singleton', plan_id: planId });
-
-  if (activeError) {
-    console.error('❌ Failed to set active plan:', activeError);
-    alert('❌ Could not update active plan.');
-    return;
-  }
-
-  alert(`✅ Plan "${title}" uploaded and set as active.`);
-  loadPlansDropdown(); // Refresh dropdown
-});
-
-// Load all plans into the dropdown
-async function loadPlansDropdown() {
-  dropdown.innerHTML = '<option>Loading...</option>';
-
-  const { data: plans, error: fetchError } = await supabase
-    .from('devotional_plans')
-    .select('id, title');
-
-  const { data: active, error: activeError } = await supabase
-    .from('active_plan')
-    .select('plan_id')
-    .single();
-
-  if (fetchError || !plans) {
-    dropdown.innerHTML = '<option>Error loading plans</option>';
-    console.error(fetchError);
-    return;
-  }
-
-  dropdown.innerHTML = '';
-  plans.forEach(plan => {
-    const option = document.createElement('option');
-    option.value = plan.id;
-    option.textContent = plan.title;
-    if (active?.plan_id === plan.id) {
-      option.selected = true;
+    if (!parsedData || parsedData.length === 0) {
+      alert('❌ Failed to parse CSV. Check formatting.');
+      return;
     }
-    dropdown.appendChild(option);
+
+    const title = titleInput.value.trim();
+    const subtitle = subtitleInput.value.trim();
+    if (!title || !subtitle) {
+      alert('Please enter a title and subtitle.');
+      return;
+    }
+
+    const payload = {
+      title,
+      subtitle,
+      tags: [], // You can add tag input later
+      data: parsedData,
+    };
+
+    try {
+      const response = await fetch('/.netlify/functions/upload-plan', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error || 'Unknown error.');
+      }
+
+      uploadedPlanId = result.id;
+      alert(`✅ Uploaded "${title}". Select it below to activate.`);
+
+      loadPlanList();
+    } catch (err) {
+      console.error(err);
+      alert('❌ Upload failed.');
+    }
   });
-}
 
-// Handle switching the active plan
-activateBtn.addEventListener('click', async () => {
-  const selectedId = dropdown.value;
-  const { error } = await supabase
-    .from('active_plan')
-    .upsert({ id: 'singleton', plan_id: selectedId });
+  // Set a plan as active
+  setActiveBtn.addEventListener('click', async () => {
+    const selected = document.querySelector('input[name="plan"]:checked');
+    const planId = selected?.value || uploadedPlanId;
 
-  if (error) {
-    alert('❌ Failed to set active plan.');
-    console.error(error);
-  } else {
-    alert('✅ Active plan updated.');
+    if (!planId) {
+      alert('Please select a plan to activate.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/set-active', {
+        method: 'POST',
+        body: JSON.stringify({ plan_id: planId }),
+      });
+
+      if (!response.ok) throw new Error('Failed to set active.');
+
+      alert('✅ Active plan updated.');
+    } catch (err) {
+      console.error(err);
+      alert('❌ Could not set active plan.');
+    }
+  });
+
+  async function loadPlanList() {
+    // NOTE: This still uses anon key on frontend
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+    const { data: plans, error } = await supabase.from('devotional_plans').select('id, title');
+    if (error) {
+      console.error('❌ Failed to load plans', error);
+      return;
+    }
+
+    planList.innerHTML = '';
+    plans.forEach(plan => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <label>
+          <input type="radio" name="plan" value="${plan.id}" />
+          ${plan.title}
+        </label>
+      `;
+      planList.appendChild(li);
+    });
   }
-});
 
-// Run on page load
-loadPlansDropdown();
+  // Load plans on page load
+  loadPlanList();
+});

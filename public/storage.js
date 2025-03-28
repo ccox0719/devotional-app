@@ -1,4 +1,8 @@
-import supabase from '../supabase/client.js'
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+
+export const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
 
 export async function savePlan(plan) {
   const fileName = plan.title.toLowerCase().replace(/\s+/g, '-') + '.json';

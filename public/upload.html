@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="data:,">
+  <script>
+    window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
+    window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Upload Plan</title>
@@ -16,18 +21,26 @@
       <input type="file" id="csv-upload" accept=".csv" hidden />
       <div class="upload-button">📤</div>
     </label>
-
+    <h3>Upload Logo</h3>
+    <input type="file" id="logo-upload" accept=".png, .jpg, .jpeg, .svg" />
+    <div id="logo-preview" style="margin: 1rem 0;">
+      <img id="logo-preview" alt="Logo Preview" style="max-height: 80px;" />
+    </div>
+    
+    <h3>Choose Accent Color</h3>
+    <input type="color" id="accent-color-picker" />
+    
     <input type="text" id="title-input" placeholder="Plan Title" />
     <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
     <input type="text" id="tags-input" placeholder="Tags (comma separated)" />
 
     <h2>Select Active Devotional</h2>
     <select id="plan-dropdown"></select>
-    <button id="activate-plan">Set Selected Plan Active</button>
-  
+    <button id="set-active">Set Selected Plan Active</button>
+    <ul id="plan-list"></ul>
+
     <div class="nav-bar">
       <button onclick="window.location.href='/index.html'">←</button>
-      <button id="theme-toggle">🌙</button>
       <button disabled>→</button>
     </div>
   </div>

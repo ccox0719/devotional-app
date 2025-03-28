@@ -38,14 +38,19 @@ body {
   font-size: 2.2rem;
   font-weight: bold;
   color: var(--accent);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem; /* tighter spacing */
+  font-family: var(--font-main);
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  font-family: var(--font-accent);
+  font-size: 1rem; /* slightly smaller but still clear */
+  font-family: var(--font-main); /* match title's font for unity */
+  color: var(--text);
+  font-style: italic;
+  opacity: 0.85;
   margin-bottom: 1.5rem;
 }
+
 
 /* Date Badge */
 .date-badge {
@@ -90,10 +95,11 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
-  text-align: left;
+  text-align: justify;
   background: var(--overlay-bg);
   border-radius: 1rem;
   padding: 1rem;
+  hyphens: auto;
 }
 
 .question-prayer {
@@ -243,7 +249,16 @@ ul#plan-list li {
 
 .passage-reference {
   text-align: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: inline-block;
+  margin: 0 auto 1.5rem;
 }
+
+
+
 
 .verse-number {
   display: none;
