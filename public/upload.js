@@ -37,7 +37,20 @@ document.addEventListener('DOMContentLoaded', () => {
       tags: [], // You can add tag input later
       data: parsedData,
     };
-
+    logoUpload.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+      
+        console.log("Selected file:", file); // 👈 Add this line
+      
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          logoPreview.src = e.target.result;
+          logoPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      });
+     
     try {
       const response = await fetch('/.netlify/functions/upload-plan', {
         method: 'POST',
@@ -112,3 +125,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load plans on page load
   loadPlanList();
 });
+const logoUpload = document.getElementById('logo-upload');
+const logoPreview = document.getElementById('logo-preview');
+
+if (logoUpload && logoPreview) {
+  logoUpload.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      logoPreview.src = e.target.result;
+      logoPreview.style.display = 'block';
+      console.log("Logo preview loaded");
+    };
+    reader.readAsDataURL(file);
+  });
+} else {
+  console.warn("Logo upload or preview element not found.");
+}
