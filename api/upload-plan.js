@@ -23,7 +23,7 @@ export async function handler(event) {
     console.log("🧾 Raw body:", event.body);
 
     const body = JSON.parse(event.body);
-    const { title, subtitle, tags, data } = body;
+    const { title, subtitle, tags, accentColor, logoUrl, data } = body;
 
     console.log("✅ Parsed:", { title, subtitle, tags, data: Array.isArray(data) ? `Array of ${data.length}` : 'Invalid' });
 
@@ -37,7 +37,7 @@ export async function handler(event) {
 
     const { data: insertResult, error } = await supabase
       .from('devotional_plans')
-      .insert([{ title, subtitle, tags, data }])
+      .insert([{ title, subtitle, tags, accentColor, logoUrl, data }])
       .select();
 
     if (error || !insertResult || insertResult.length === 0) {

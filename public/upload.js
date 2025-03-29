@@ -52,13 +52,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
      
     try {
-      const response = await fetch('/.netlify/functions/upload-plan', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
+        const planData = {
+            title,
+            subtitle,
+            tags,
+            data: parsedCsvData,
+            accentColor,
+            logoUrl
+          };
+          
+          const response = await fetch('/.netlify/functions/upload-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(planData)
+          });
+          
+          const result = await response.json();
+          console.log("📦 Upload complete, plan ID:", result.id)    
+          
       if (!response.ok) {
         throw new Error(result?.error || 'Unknown error.');
       }
