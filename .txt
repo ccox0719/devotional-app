@@ -3,6 +3,8 @@ git commit -m "Your commit message"
 git push
 netlify deploy --prod
 
+netlify dev
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 const supabase = createClient(
