@@ -292,7 +292,9 @@ ul#plan-list li {
   padding: 0.5rem;
   background-color: var(--overlay-bg);
 }
-
+#upload-plan {
+  border: 2px var(--accent);
+}
 .logo-preview {
   max-width: 100%;
   max-height: 160px;

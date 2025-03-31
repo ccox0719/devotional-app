@@ -1,86 +1,135 @@
-import { parseCSV } from './csvParser.js';
-import supabase from './utils/supabaseClient.js';
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log("DOM fully loaded. Checking authentication...");
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+  if (authError || !user) {
+    console.warn("Redirecting: user not found or auth error", { authError, user });
+    alert('User not authenticated. Please sign in.');
+    window.location.href = 'login.html';
+    return;
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const fileInput = document.getElementById('csv-upload');
+  // Now that the user is authenticated, select the DOM elements
+  const uploadButton = document.getElementById('upload-plan');
   const titleInput = document.getElementById('title-input');
   const subtitleInput = document.getElementById('subtitle-input');
+  const tagsInput = document.getElementById('tags-input');
+  const accentColorPicker = document.getElementById('accent-color-picker');
+  const logoInput = document.getElementById('logo-upload');
+  const csvInput = document.getElementById('csv-upload');
+  const logoPreview = document.getElementById('logo-preview');
   const setActiveBtn = document.getElementById('set-active');
   const planList = document.getElementById('plan-list');
+  console.log("Upload button:", uploadButton);
 
-  let parsedData = null;
   let uploadedPlanId = null;
 
-  // Handle CSV file selection
-  fileInput.addEventListener('change', async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  // Logo file preview
+  if (logoInput && logoPreview) {
+    logoInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        logoPreview.src = e.target.result;
+        logoPreview.style.display = 'block';
+        console.log("Logo preview loaded");
+      };
+      reader.readAsDataURL(file);
+    });
+  } else {
+    console.warn("Logo upload or preview element not found.");
+  }
 
-    const text = await file.text();
-    parsedData = parseCSV(text);
-
+  // CSV file change listener (for logging purposes only)
+  csvInput.addEventListener('change', async (event) => {
+    const csvFile = event.target.files[0];
+    if (!csvFile) return;
+    const text = await csvFile.text();
+    const parsedData = parseCSV(text);
     if (!parsedData || parsedData.length === 0) {
       alert('❌ Failed to parse CSV. Check formatting.');
-      return;
+    } else {
+      console.log('✅ CSV parsed and ready for upload.');
     }
+  });
 
-    const title = titleInput.value.trim();
-    const subtitle = subtitleInput.value.trim();
-    if (!title || !subtitle) {
-      alert('Please enter a title and subtitle.');
-      return;
-    }
+  // Upload plan when the button is clicked
+  uploadButton.addEventListener('click', async () => {
+    uploadButton.disabled = true;
+    uploadButton.textContent = 'Uploading...';
 
-    const payload = {
-      title,
-      subtitle,
-      tags: [], // You can add tag input later
-      data: parsedData,
-    };
-    logoUpload.addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
-      
-        console.log("Selected file:", file); // 👈 Add this line
-      
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          logoPreview.src = e.target.result;
-          logoPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      });
-     
     try {
-        const planData = {
-            title,
-            subtitle,
-            tags,
-            data: parsedCsvData,
-            accentColor,
-            logoUrl
-          };
-          
-          const response = await fetch('/.netlify/functions/upload-plan', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(planData)
-          });
-          
-          const result = await response.json();
-          console.log("📦 Upload complete, plan ID:", result.id)    
-          
-      if (!response.ok) {
-        throw new Error(result?.error || 'Unknown error.');
+      const title = titleInput.value.trim();
+      const subtitle = subtitleInput.value.trim();
+      const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      const accentColor = accentColorPicker.value;
+      const logoFile = logoInput.files[0];
+      const csvFile = csvInput.files[0];
+
+      if (!title || !subtitle || !csvFile) {
+        alert('Please enter title, subtitle, and upload a CSV file.');
+        uploadButton.disabled = false;
+        uploadButton.textContent = 'Upload Plan';
+        return;
       }
 
-      uploadedPlanId = result.id;
-      alert(`✅ Uploaded "${title}". Select it below to activate.`);
+      let logoUrl = null;
+      if (logoFile) {
+        if (logoFile.size > 1024 * 1024) { // Ensure logo is under 1MB
+          alert('Logo file must be under 1MB.');
+          uploadButton.disabled = false;
+          uploadButton.textContent = 'Upload Plan';
+          return;
+        }
+        logoUrl = await uploadLogo(logoFile);
+      }
+
+      const csvText = await csvFile.text();
+      const data = parseCSV(csvText);
+
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        throw new Error('User not authenticated.');
+      }
+      const userId = userData.user.id;
+
+      const { data: insertData, error: insertError } = await supabase
+        .from('devotional_plans')
+        .insert({
+          title,
+          subtitle,
+          tags,
+          accentColor,
+          logo_url: logoUrl,
+          data,
+          user_id: userId
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      const insertedPlan = insertData[0];
+      alert(`✅ Plan uploaded successfully! Plan ID: ${insertedPlan.id}`);
+
+      // Reset form fields
+      titleInput.value = '';
+      subtitleInput.value = '';
+      tagsInput.value = '';
+      accentColorPicker.value = '#f97316';
+      logoInput.value = '';
+      csvInput.value = '';
+      logoPreview.src = '';
+      uploadedPlanId = insertedPlan.id;
 
       loadPlanList();
     } catch (err) {
-      console.error(err);
-      alert('❌ Upload failed.');
+      console.error('Upload error:', err);
+      alert('Something went wrong during upload.');
+    } finally {
+      uploadButton.disabled = false;
+      uploadButton.textContent = 'Upload Plan';
     }
   });
 
@@ -88,20 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
   setActiveBtn.addEventListener('click', async () => {
     const selected = document.querySelector('input[name="plan"]:checked');
     const planId = selected?.value || uploadedPlanId;
-
     if (!planId) {
       alert('Please select a plan to activate.');
       return;
     }
-
     try {
-      const response = await fetch('/.netlify/functions/set-active', {
-        method: 'POST',
-        body: JSON.stringify({ plan_id: planId }),
-      });
-
-      if (!response.ok) throw new Error('Failed to set active.');
-
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        throw new Error('User not authenticated.');
+      }
+      const userId = userData.user.id;
+      const { data: upsertData, error: upsertError } = await supabase
+        .from('active_plan')
+        .upsert({
+          user_id: userId,
+          plan_id: planId
+        });
+      if (upsertError) {
+        throw upsertError;
+      }
       alert('✅ Active plan updated.');
     } catch (err) {
       console.error(err);
@@ -110,16 +164,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function loadPlanList() {
-    // NOTE: This still uses anon key on frontend
-    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-    const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-
-    const { data: plans, error } = await supabase.from('devotional_plans').select('id, title');
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) {
+      console.error('User not authenticated');
+      return;
+    }
+    const userId = userData.user.id;
+    const { data: plans, error } = await supabase
+      .from('devotional_plans')
+      .select('id, title')
+      .eq('user_id', userId);
     if (error) {
       console.error('❌ Failed to load plans', error);
       return;
     }
-
     planList.innerHTML = '';
     plans.forEach(plan => {
       const li = document.createElement('li');
@@ -133,25 +191,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Load plans on page load
   loadPlanList();
 });
-const logoUpload = document.getElementById('logo-upload');
-const logoPreview = document.getElementById('logo-preview');
-
-if (logoUpload && logoPreview) {
-  logoUpload.addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      logoPreview.src = e.target.result;
-      logoPreview.style.display = 'block';
-      console.log("Logo preview loaded");
-    };
-    reader.readAsDataURL(file);
-  });
-} else {
-  console.warn("Logo upload or preview element not found.");
-}
