@@ -1,15 +1,10 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log("DOM fully loaded. Checking authentication...");
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  
-  if (authError || !user) {
-    console.warn("Redirecting: user not found or auth error", { authError, user });
-    alert('User not authenticated. Please sign in.');
-    window.location.href = 'login.html';
-    return;
-  }
+import { parseCSV } from './csvParser.js';
+import supabase from './utils/supabaseClient.js';
 
-  // Now that the user is authenticated, select the DOM elements
+document.addEventListener('DOMContentLoaded', async () => {
+  // DOM fully loaded – no authentication check
+
+  // Select DOM elements
   const uploadButton = document.getElementById('upload-plan');
   const titleInput = document.getElementById('title-input');
   const subtitleInput = document.getElementById('subtitle-input');
@@ -20,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const logoPreview = document.getElementById('logo-preview');
   const setActiveBtn = document.getElementById('set-active');
   const planList = document.getElementById('plan-list');
-  console.log("Upload button:", uploadButton);
 
   let uploadedPlanId = null;
 
@@ -88,12 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const csvText = await csvFile.text();
       const data = parseCSV(csvText);
 
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData.user) {
-        throw new Error('User not authenticated.');
-      }
-      const userId = userData.user.id;
-
+      // Insert plan without authentication details
       const { data: insertData, error: insertError } = await supabase
         .from('devotional_plans')
         .insert({
@@ -102,8 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           tags,
           accentColor,
           logo_url: logoUrl,
-          data,
-          user_id: userId
+          data
         });
 
       if (insertError) {
@@ -142,15 +130,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
     try {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData.user) {
-        throw new Error('User not authenticated.');
-      }
-      const userId = userData.user.id;
+      // Upsert the active plan without user authentication info
       const { data: upsertData, error: upsertError } = await supabase
         .from('active_plan')
         .upsert({
-          user_id: userId,
           plan_id: planId
         });
       if (upsertError) {
@@ -164,16 +147,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   async function loadPlanList() {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData.user) {
-      console.error('User not authenticated');
-      return;
-    }
-    const userId = userData.user.id;
+    // Load all plans without filtering by user
     const { data: plans, error } = await supabase
       .from('devotional_plans')
-      .select('id, title')
-      .eq('user_id', userId);
+      .select('id, title');
     if (error) {
       console.error('❌ Failed to load plans', error);
       return;
