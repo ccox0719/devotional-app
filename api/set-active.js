@@ -18,17 +18,20 @@ export async function handler(event) {
 
   try {
     console.log("Raw request body:", event.body);
-    const { plan_id } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const { user_id, plan_id } = body;
 
-    if (!plan_id) {
-      console.error("Missing plan_id in request body");
-      return { statusCode: 400, body: 'Missing plan_id' };
+    if (!user_id || !plan_id) {
+      console.error("Missing user_id or plan_id in request body");
+      return { statusCode: 400, body: 'Missing user_id or plan_id' };
     }
 
-    // Perform the upsert: assuming your table active_plan has columns "id" and "plan_id"
-    const { error } = await supabase
+    console.log("Setting active plan:", { user_id, plan_id });
+
+    const { data: upsertData, error } = await supabase
       .from('active_plan')
-      .upsert({ id: 'singleton', plan_id });
+      .upsert({ user_id, plan_id }, { onConflict: 'user_id' })
+      .select('*');
 
     if (error) {
       console.error("Supabase upsert error:", error);

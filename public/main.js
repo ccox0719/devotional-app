@@ -1,23 +1,28 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 import supabase from './utils/supabaseClient.js';
+import { checkAuth, subscribeToAuthChanges } from './auth.js';
 
-async function fetchESVText(reference) {
-  const response = await fetch(
-    `https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}&include-verse-numbers=false&include-footnotes=false&include-headings=false&include-passage-references=false&indent-paragraphs=0`,
-    {
-      headers: {
-      Authorization: '9328c9005b4622bc622b4f55a75a90a20e69003f'
+async function loadPlan() {
+  // 1. Get authenticated user
+  const user = await checkAuth();
+  if (!user) return;
+  console.log('Authenticated user:', user);
+
+  // Listen for auth state changes (optional but recommended)
+  subscribeToAuthChanges((event, session) => {
+    if (!session) {
+      document.getElementById('content').innerText = 'Your session has expired. Please sign in again.';
+      window.location.href = 'login.html';
     }
   });
-  const json = await response.json();
-  return json.passages?.[0] || 'Scripture not found.';
-}
-async function loadPlan() {
-  // 1. Get active plan ID
+
+  // 2. Get active plan ID for the current user
   const { data: active, error: activeError } = await supabase
     .from('active_plan')
     .select('plan_id')
+    .eq('user_id', user.id)
     .single();
+  console.log('Active plan:', active);
 
   if (activeError || !active) {
     document.getElementById('content').innerText = 'No active plan found.';
