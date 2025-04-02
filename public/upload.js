@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .from('active_plan')
         .upsert({
           user_id: user.id,
-          plan_id: Number(planId)
+          plan_id: planId
         }, { onConflict: 'user_id' })
         .select('*');
       if (upsertError) {

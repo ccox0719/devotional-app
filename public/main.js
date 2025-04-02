@@ -2,6 +2,8 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 import supabase from './utils/supabaseClient.js';
 import { checkAuth, subscribeToAuthChanges } from './auth.js';
 
+const apiKey = '9328c9005b4622bc622b4f55a75a90a20e69003f'; // Replace with your actual key securely
+
 async function loadPlan() {
   // 1. Get authenticated user
   const user = await checkAuth();
@@ -45,9 +47,29 @@ async function loadPlan() {
   document.getElementById('plan-subtitle').innerText = plan.subtitle;
 
   const today = new Date();
-  const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
   
-  // 4. Match today's entry
+  async function fetchBiblePassage(reference) {
+    const apiUrl = `https://api.esv.org/v3/passage/text/?q=${encodeURIComponent(reference)}`;
+    try {
+      const response = await fetch(apiUrl, {
+        headers: { "Authorization": `Token ${apiKey}` }
+      });
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data.passages ? data.passages[0].trim() : "Passage not found";
+    } catch (error) {
+      console.error("Error fetching Bible passage:", error.message);
+      return "Error fetching passage. Please try again.";
+    }
+  }
+  
+  // 4. Match today's entry (assumes plan.data entries have a "Date" field in "YYYY-MM-DD" format)
   const todayEntry = plan.data.find(entry => entry.Date === formattedDate);
 
   if (!todayEntry) {
@@ -55,32 +77,23 @@ async function loadPlan() {
     return;
   }
 
-  // 5. Display it
-  const passage = await fetchESVText(todayEntry.Reference || '');
+  // 5. Display it using fetchBiblePassage (note: function name corrected)
+  const passage = await fetchBiblePassage(todayEntry.Reference || '');
 
   // Set the plan title (without the reference)
   document.getElementById('plan-title').innerText = plan.title;
-  
-  // Clear previous content
   const contentEl = document.getElementById('content');
   contentEl.innerHTML = '';
-  
-  // Create and insert the reference heading
-  const referenceHeading = document.createElement('div');
-  referenceHeading.className = 'passage-reference';
-  referenceHeading.innerText = todayEntry.Reference || '';
-  contentEl.appendChild(referenceHeading);
-  
+
   // Insert the passage as a new paragraph
   const passageText = document.createElement('div');
   passageText.className = 'devotional-text';
   passageText.innerHTML = passage; // allows formatting from API
   contentEl.appendChild(passageText);
-  
+
   // Set question and prayer
   document.getElementById('question').innerText = todayEntry['Reflective Question'] || '—';
   document.getElementById('prayer').innerText = todayEntry['Prayer Prompt'] || '—';
-  
 }
 
 loadPlan();
