@@ -199,6 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw upsertError;
       }
       alert('✅ Active plan updated.');
+      window.location.href = 'index.html'; // Redirect to main.html after success
     } catch (err) {
       console.error(err);
       alert('❌ Could not set active plan.');

@@ -29,15 +29,17 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 800px;
   padding: clamp(1.5rem, 5vw, 2.5rem);
   box-sizing: border-box;
-  text-align: center;
+  margin: 0 auto; /* Centers the container on the page */
+  /* remove text-align: center; */
 }
 
 .title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: bold;
+  text-align: center;
   color: var(--accent);
   margin-bottom: 0.2rem;
   font-family: var(--font-main);
@@ -46,47 +48,11 @@ body {
 .subtitle {
   font-size: clamp(1rem, 2.5vw, 1.2rem);
   font-family: var(--font-main);
+  text-align: center;
   color: var(--text);
   font-style: italic;
   opacity: 0.85;
   margin-bottom: 1.5rem;
-}
-/* Date Badge */
-.date-badge {
-  width: clamp(4rem, 20vw, 6rem);
-  height: clamp(4rem, 20vw, 6rem);
-  background-color: var(--accent);
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1rem;
-  padding-top: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  line-height: 1;
-  text-align: center;
-}
-
-.date-number {
-  font-size: clamp(2.2rem, 6vw, 3rem);
-  font-weight: bold;
-  color: var(--bg);
-  margin: 0;
-  line-height: 1;
-}
-
-.date-month {
-  font-size: clamp(1rem, 3vw, 1.4rem);
-  font-weight: normal;
-  color: var(--text);
-  margin-top: 0.2rem;
-}
-
-.date-badge span:not(.date-number):not(.date-month) {
-  font-size: 1.1rem;
-  display: flex;
-  font-weight: normal;
 }
 
 .passage-reference {
@@ -100,6 +66,7 @@ body {
 /* Main Text Blocks */
 .devotional-text {
   font-size: clamp(1rem, 2.5vw, 1.1rem);
+  font-family: Georgia, serif;
   text-align: justify;
   line-height: 1.6;
   hyphens: auto;
@@ -107,17 +74,20 @@ body {
 }
 
 .question-prayer {
+  text-align: center;
   background: var(--overlay-bg);
   border-radius: 1rem;
   padding: clamp(1rem, 3vw, 1.5rem);
 }
 
 .question-prayer h2 {
+  text-align: center;
   font-size: 1.4rem;
   margin: 1.2rem 0 0.3rem;
 }
 
 .question-prayer p {
+  text-align: center;
   margin: 0 0 1rem;
 }
 
@@ -221,6 +191,7 @@ ul#plan-list li {
 /* Icons & Buttons */
 .icon-heading,
 .icon-button {
+  text-align: center;
   width: 2rem;
   height: 2rem;
   color: var(--accent); /* enables currentColor */
@@ -229,8 +200,8 @@ ul#plan-list li {
 
 .menu-button {
   position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
+  top: 1.8rem;
+  right: 1.8rem;
   background: none;
   color: var(--accent);
   font-size: 2rem;
@@ -252,7 +223,15 @@ ul#plan-list li {
   justify-content: center;
   align-items: center;
 }
-
+pre.devotional-text {
+  font-family: var(--font-main); /* Use your main font, not monospace */
+  white-space: pre-wrap;         /* Preserves line breaks and indentation */
+  text-align: left;              /* Overrides any ‘justify’ from .devotional-text */
+  line-height: 1.6;
+  padding: 0.8rem;
+  margin-bottom: 2rem;
+  hyphens: none;                 /* Prevents automatic hyphenation */
+}
 .verse-number {
   display: none;
 }
@@ -369,4 +348,45 @@ ul#plan-list li {
 
 .upload-navigation button:hover {
   transform: scale(1.15);
+}
+
+/* Center the date badge */
+.date-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Circular date badge design */
+.date-badge {
+  background-color: var(--accent);
+  color: var(--bg);
+  font-size: 1.4rem;
+  font-weight: bold;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Month text styling */
+.date-badge span {
+  /* Make the month text a different color if desired */
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: normal;
+  /* Shift the month text upward slightly */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 400px) {
+  .date-badge {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
 }
