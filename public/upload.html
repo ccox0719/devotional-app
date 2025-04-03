@@ -16,21 +16,28 @@
     <h1 class="title">Upload</h1>
     <p class="subtitle">upload bible plan<br>csv</p>
 
-    <input type="text" id="title-input" placeholder="Plan Title" />
-    <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
-    <input type="text" id="tags-input" placeholder="Tags (comma separated)" />
+    <form class="upload-form">
+      <label for="title-input">Plan Title</label>
+      <input type="text" id="title-input" placeholder="Plan Title" />
 
-    <label class="upload-icon">
-      <input type="file" id="csv-upload" accept=".csv" hidden />
-      <div class="upload-button">📤</div>
-    </label>
-    <h3>Upload Logo</h3>
-    <input type="file" id="logo-upload" accept=".png, .jpg, .jpeg, .svg" />
+      <label for="subtitle-input">Plan Subtitle</label>
+      <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
 
-    <div id="logo-preview-container" style="margin-top: 1rem;">
-      <img id="logo-preview" class="logo-preview" src="" alt="Logo Preview" />
-    
-    </div>
+      <label for="tags-input">Tags (comma separated)</label>
+      <input type="text" id="tags-input" placeholder="Tags (comma separated)" />
+
+      <label class="upload-icon">
+        <input type="file" id="csv-upload" accept=".csv" hidden />
+        <div class="upload-button">📤</div>
+      </label>
+
+      <h3>Upload Logo</h3>
+      <input type="file" id="logo-upload" accept=".png, .jpg, .jpeg, .svg" />
+
+      <div id="logo-preview-container" style="margin-top: 1rem;">
+        <img id="logo-preview" class="logo-preview" src="" alt="Logo Preview" />
+      </div>
+    </form>
 
     <h3>Choose Accent Color</h3>
     <input type="color" id="accent-color-picker" />

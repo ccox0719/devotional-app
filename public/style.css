@@ -315,7 +315,7 @@ pre.devotional-text {
   margin-top: 1rem;
   font-family: var(--font-accent);
   background-color: var(--accent);
-  color: var(--bg);
+  color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -360,7 +360,7 @@ pre.devotional-text {
 /* Circular date badge design */
 .date-badge {
   background-color: var(--accent);
-  color: var(--bg);
+  color: #fff;
   font-size: 1.4rem;
   font-weight: bold;
   width: 3rem;
@@ -375,11 +375,10 @@ pre.devotional-text {
 
 /* Month text styling */
 .date-badge span {
-  /* Make the month text a different color if desired */
   color: var(--text);
   font-size: 0.8rem;
   font-weight: normal;
-  /* Shift the month text upward slightly */
+  margin-top: -2px;
 }
 
 /* Responsive adjustments for smaller screens */
