@@ -5,16 +5,25 @@ const urlsToCache = [
   "/style.css",
   "/main.js",
   "/upload.js",
-  "/favicon.ico"
 ];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+self.addEventListener("install", event => {
+    event.waitUntil(
+      caches.open(CACHE_NAME).then(cache => {
+        return Promise.all(
+          urlsToCache.map(url =>
+            fetch(url).then(response => {
+              if (!response.ok) {
+                throw new Error(`Request for ${url} failed with status ${response.status}`);
+              }
+              return cache.put(url, response);
+            })
+          )
+        );
+      })
+    );
+  });
+  
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
