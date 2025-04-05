@@ -14,6 +14,60 @@ body.dark-mode {
   --text: #ededed;
   --overlay-bg: rgba(255, 255, 255, 0.05);
 }
+.header {
+  position: relative;
+  padding: 2rem 1rem 1.5rem;
+  background-color: var(--bg);
+  border-bottom: 2px solid var(--accent);
+  text-align: center;
+}
+.header-buttons {
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.header-buttons button {
+  background: none;
+  color: var(--accent);
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.header-buttons button:hover {
+  transform: scale(1.1);
+}
+.header-buttons svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--accent) !important;
+  fill: none !important;
+}
+
+#install-button {
+  color: var(--accent) !important;
+}
+
+.menu-button {
+  position: absolute;
+  top: 1.8rem;
+  right: 1.8rem;
+  z-index: 10;
+  font-size: 2rem;
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.menu-button:hover {
+  transform: scale(1.1);
+}
 
 body {
   margin: 0;
@@ -101,10 +155,11 @@ input[type="text"] {
   font-size: 1rem;
 }
 
+/* General button styles for other buttons */
 button,
 .upload-button {
-  background-color: var(--accent);
-  color: var(--text);
+  background-color: var(--bg);
+  color: var(--accent); /* This makes the icon the same color as the background */
   border: none;
   padding: 0.8rem 1.2rem;
   border-radius: 0.5rem;
@@ -114,6 +169,35 @@ button,
   font-family: var(--font-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+#install-button {
+  /* A typical button look */
+  display: inline-flex;           /* So we can center the icon */
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  color: #fff;                    /* Icon (currentColor) becomes white */
+  border: none;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* Hover effect (optional) */
+#install-button:hover {
+  transform: scale(1.05);
+}
+
+/* Ensure the SVG picks up the button's color */
+#install-button svg {
+  stroke: currentColor;  /* In case there's an inline stroke="currentColor" */
+  fill: none;            /* or fill="currentColor" if you want a filled icon */
+  width: 24px;
+  height: 24px;
+}
+
 
 button:disabled {
   background-color: gray;
@@ -196,25 +280,6 @@ ul#plan-list li {
   height: 2rem;
   color: var(--accent); /* enables currentColor */
   opacity: 0.9;
-}
-
-.menu-button {
-  position: absolute;
-  top: 1.8rem;
-  right: 1.8rem;
-  background: none;
-  color: var(--accent);
-  font-size: 2rem;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  padding: 0;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-.menu-button:hover {
-  transform: scale(1.1);
 }
 
 /* Utility & Layout */
@@ -379,6 +444,14 @@ pre.devotional-text {
   font-size: 0.8rem;
   font-weight: normal;
   margin-top: -2px;
+}
+.date-day {
+  background-color: var(--bg);     /* Day background */
+  color: var(--accent);            /* Day text in accent */
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 /* Responsive adjustments for smaller screens */

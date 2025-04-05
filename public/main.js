@@ -79,7 +79,29 @@ async function loadPlan() {
       window.location.href = 'login.html';
     }
   });
-
+  document.addEventListener("DOMContentLoaded", () => {
+    const installBtn = document.getElementById("install-button");
+    
+    // Always show the install button, regardless of standalone mode
+    installBtn.style.display = "block";
+  
+    window.addEventListener("beforeinstallprompt", (e) => {
+      console.log("[PWA] beforeinstallprompt event fired");
+      e.preventDefault();
+      // No condition; always show the install button
+      installBtn.style.display = "block";
+  
+      installBtn.addEventListener("click", () => {
+        console.log("[PWA] User clicked install button");
+        e.prompt();
+        e.userChoice.then((choiceResult) => {
+          console.log(`[PWA] User choice: ${choiceResult.outcome}`);
+        });
+      });
+    });
+  });
+  
+  
   // 2. Get active plan ID for the current user
   const { data: active, error: activeError } = await supabase
     .from('active_plan')
@@ -146,6 +168,11 @@ async function loadPlan() {
   // Set question and prayer
   questionEl.innerText = todayEntry['Reflective Question'] || '—';
   prayerEl.innerText = todayEntry['Prayer Prompt'] || '—';
+}
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/serviceworker.js')
+    .then(() => console.log('Service Worker registered'))
+    .catch((err) => console.error('Service Worker registration failed', err));
 }
 
 loadPlan().then(() => {

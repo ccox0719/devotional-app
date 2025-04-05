@@ -2,7 +2,12 @@
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:,">
+    <!-- Link to PWA icons -->
+    <link rel="icon" href="/icons/icon-192x192.png" type="image/png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#f97316" />
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
     <script>
       window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
       window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
@@ -14,16 +19,25 @@
     <link rel="stylesheet" href="style.css" />
   </head> 
 <body>
-  <div class="container">
-    <button class="menu-button">
-      ☰
-    </button>    
-    <h1 id="plan-title" class="title">Title</h1>
-    <p id="plan-subtitle" class="subtitle">subtitle description of plan</p>
-    <div class="date-container">
-      <div class="date-badge">
-        12
-        <span>MAR</span>
+  <div class="header">
+    <div class="header-buttons">
+      <button class="menu-button">☰</button>
+      <button id="install-button" class="install-button" aria-label="Install App">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+          <path d="M12 2v12"></path>
+          <polyline points="5 11 12 18 19 11"></polyline>
+          <line x1="5" y1="22" x2="19" y2="22"></line>
+        </svg>
+      </button>               
+      </div>
+    <div class="header-content">
+      <h1 id="plan-title" class="title">Title</h1>
+      <p id="plan-subtitle" class="subtitle">subtitle description of plan</p>
+      <div class="date-container">
+        <div class="date-badge">
+          12
+          <span>MAR</span>
+        </div>
       </div>
     </div>
     
@@ -62,5 +76,6 @@
     </div>
   </div>
   <script src="main.js" type="module"></script>
+  <script src="install.js"></script>
 </body>
 </html>
