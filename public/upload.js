@@ -8,7 +8,7 @@ function normalizeSvgColors(svgText) {
 }
 if (window._uploadJsLoaded) {
   console.log("upload.js already loaded, skipping duplicate execution.");
-  // Optionally, you can return or skip setting up event listeners
+  return; // ⛔ Stops the rest of the script from running again
 } else {
   window._uploadJsLoaded = true;
 }
@@ -90,11 +90,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // CSV file change listener (for logging purposes only)
-  uploadButton.addEventListener('click', async (e) => {
+  if (!uploadButton.dataset.listenerAttached) {
+    uploadButton.dataset.listenerAttached = "true";
+    uploadButton.addEventListener('click', async (e) => {
     e.preventDefault();
     uploadButton.disabled = true;
     uploadButton.textContent = 'Uploading...';
-    ...
 
     try {
       const logoFile = logoInput.files[0];
