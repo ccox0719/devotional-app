@@ -85,10 +85,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // CSV file change listener (for logging purposes only)
-  uploadButton.addEventListener('click', async () => {
+  uploadButton.addEventListener('click', async (e) => {
+    e.preventDefault();
     uploadButton.disabled = true;
     uploadButton.textContent = 'Uploading...';
-  
+    ...
+
     try {
       const logoFile = logoInput.files[0];
       const csvFile = csvInput.files[0];
@@ -141,7 +143,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         .insert(newRow)
         .select('*')
         .single();
-  
       console.log('Insert response:', { insertData, insertError });
   
       if (insertError) throw insertError;
@@ -169,6 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Set a plan as active
+  console.log("Attaching uploadButton click listener");
   setActiveBtn.addEventListener('click', async () => {
     const selected = document.querySelector('input[name="plan"]:checked');
     const planId = selected?.value || uploadedPlanId;
