@@ -57,13 +57,11 @@
         <label for="tags-input">Tags (comma separated)</label>
         <input type="text" id="tags-input" placeholder="e.g. Old Testament, Wisdom" />
       </div>
-      
       <div class="sample-download" style="margin-top: 1rem;">
         <p style="margin-top: 1rem;">
           Need help? <a href="sample_devotional.csv" download>Download sample file</a> (CSV supported))
         </p>        
       </div>
-      
       <div class="form-group">
         <label for="csv-upload">Upload CSV</label>
         <label class="upload-icon">
@@ -71,26 +69,21 @@
           <div class="upload-button">📤 Upload CSV</div>
         </label>
       </div>
-
       <div class="form-group">
         <label for="logo-upload">Upload Logo</label>
         <input type="file" id="logo-upload" accept=".png, .jpg, .jpeg, .svg" />
       </div>
-
       <div class="form-group">
         <label for="accent-color-picker">Choose Accent Color</label>
         <input type="color" id="accent-color-picker" value="#f97316" />
       </div>
-
-      <button id="upload-plan">Upload Plan</button>
+      <button id="upload-plan" type="button">Upload Plan</button>
     </form>
-
     <div id="logo-preview-container" style="margin-top: 1rem;">
       <img id="logo-preview" class="logo-preview" src="" alt="Logo Preview" />
     </div>
   </div>
 </div>
-
   <script type="module" src="upload.js"></script>
   <script src="storage.js" type="module"></script>  
 </body>

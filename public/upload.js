@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         user_id: user.id
       };
   
-      // Upload logo if present
       if (logoFile) {
         if (logoFile.size > 1024 * 1024) {
           alert('Logo file must be under 1MB.');
@@ -159,130 +158,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       logoPreview.src = '';
       uploadedPlanId = insertData.id;
   
-      loadPlanList();
-    } catch (err) {
-      console.error('Upload error:', err);
-      alert('Something went wrong during upload.');
-    } finally {
-      uploadButton.disabled = false;
-      uploadButton.textContent = 'Upload Plan';
-    }
-  });
-  
-
-  // Upload plan when the button is clicked
-  uploadButton.addEventListener('click', async () => {
-    uploadButton.disabled = true;
-    uploadButton.textContent = 'Uploading...';
-
-    // Get file references
-    const logoFile = logoInput.files[0];
-    const csvFile = csvInput.files[0];
-    const title = titleInput.value.trim();
-    const subtitle = subtitleInput.value.trim();
-    const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-    const accentColor = accentColorPicker.value;
-
-    const csvText = await csvFile.text();
-    const isTSV = csvFile.name.toLowerCase().endsWith('.tsv');
-    const delimiter = isTSV ? '\t' : ',';
-    const parsedData = parseCSV(csvText, delimiter);
-
-    const newRow = {
-      title,
-      subtitle,
-      tags,
-      accentColor,
-      data: parsedData,
-      user_id: user.id
-    };
-
-    if (logoFile) {
-      if (logoFile.size > 1024 * 1024) {
-        alert('Logo file must be under 1MB.');
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Upload Plan';
-        return;
-      }
-      const logoResult = await uploadLogo(logoFile);
-      if (logoResult.isSvg) {
-        newRow.logo_svg = logoResult.content;
-      } else {
-        newRow.logo_url = logoResult.content;
-      }
-    }
-
-
-    // Upload logo if available and valid
-    if (logoFile) {
-      if (logoFile.size > 1024 * 1024) { // Ensure logo is under 1MB
-        alert('Logo file must be under 1MB.');
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Upload Plan';
-        return;
-      }
-      console.log('Before calling uploadLogo, uploadLogo =', uploadLogo);
-      const logoResult = await uploadLogo(logoFile);
-      
-        if (logoResult.isSvg) {
-          newRow.logo_svg = logoResult.content;
-        } else {
-          newRow.logo_url = logoResult.content;
-        }
-    }
-
-    try {
-      const title = titleInput.value.trim();
-      const subtitle = subtitleInput.value.trim();
-      const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-      const accentColor = accentColorPicker.value;
-
-      if (!title || !subtitle || !csvFile) {
-        alert('Please enter title, subtitle, and upload a CSV file.');
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Upload Plan';
-        return;
-      }
-      const csvText = await csvFile.text();
-      const isTSV = csvFile.name.toLowerCase().endsWith('.tsv');
-      const delimiter = isTSV ? '\t' : ',';
-      const data = parseCSV(csvText, delimiter);
-      newRow.data = data;
-
-
-      // Log the row to be inserted for debugging
-      console.log('Row to insert:', newRow);
-
-      console.log('📝 Final row to insert:', newRow);
-
-      const { data: insertData, error: insertError } = await supabase
-        .from('devotional_plans')
-        .insert(newRow)
-        .select('*')
-        .single();
-
-
-      // Log the response from the insert
-      console.log('Insert response:', { insertData, insertError });
-
-      if (insertError) {
-        throw insertError;
-      }
-      console.log('user.id:', user.id);
-      // Since .single() returns the row as an object, no need for [0]
-      const insertedPlan = insertData;
-      alert(`✅ Plan uploaded successfully! Plan ID: ${insertedPlan.id}`);
-
-      // Reset form fields
-      titleInput.value = '';
-      subtitleInput.value = '';
-      tagsInput.value = '';
-      accentColorPicker.value = '#f97316';
-      logoInput.value = '';
-      csvInput.value = '';
-      logoPreview.src = '';
-      uploadedPlanId = insertedPlan.id;
-
       loadPlanList();
     } catch (err) {
       console.error('Upload error:', err);
