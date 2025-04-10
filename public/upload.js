@@ -8,13 +8,6 @@ function normalizeSvgColors(svgText) {
   return svgText.replace(/fill="(#[^"]+|black|#000000)"/gi, 'fill="currentColor"');
 }
 
-if (window._uploadJsLoaded) {
-  console.log("upload.js already loaded, skipping duplicate execution.");
-  return;
-} else {
-  window._uploadJsLoaded = true;
-}
-
 async function uploadLogo(file) {
   const isSvg = file.name.toLowerCase().endsWith('.svg');
   if (isSvg) {
@@ -103,7 +96,6 @@ if (!setActiveBtn.dataset.listenerAttached) {
       uploadButton.textContent = 'Uploading...';
       try {
         const logoFile = logoInput.files[0];
-        const csvFile = csvInput.files[0];
         const title = titleInput.value.trim();
         const subtitle = subtitleInput.value.trim();
         const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean);
@@ -171,7 +163,6 @@ if (!setActiveBtn.dataset.listenerAttached) {
       csvStatus.textContent = '';
     }
   });
-  const csvFile = csvInput.files[0];
   if (!setActiveBtn.dataset.listenerAttached) {
     setActiveBtn.dataset.listenerAttached = "true";
     setActiveBtn.addEventListener('click', async () => {
