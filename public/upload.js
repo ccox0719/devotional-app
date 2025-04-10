@@ -6,7 +6,12 @@ console.log('upload.js loaded'); // Log at file load
 function normalizeSvgColors(svgText) {
   return svgText.replace(/fill="(#[^"]+|black|#000000)"/gi, 'fill="currentColor"');
 }
-
+if (window._uploadJsLoaded) {
+  console.log("upload.js already loaded, skipping duplicate execution.");
+  // Optionally, you can return or skip setting up event listeners
+} else {
+  window._uploadJsLoaded = true;
+}
 async function uploadLogo(file) {
   const isSvg = file.name.toLowerCase().endsWith('.svg');
 
