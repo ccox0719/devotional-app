@@ -70,20 +70,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let uploadedPlanId = null;
 
-  if (logoInput && logoPreview && !logoInput.dataset.listenerAttached) {
-    logoInput.dataset.listenerAttached = "true";
-    logoInput.addEventListener('change', function () {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        logoPreview.src = e.target.result;
-        logoPreview.style.display = 'block';
-        console.log("Logo preview loaded");
-      };
-      reader.readAsDataURL(file);
-    });
-  }
+if (!setActiveBtn.dataset.listenerAttached) {
+  setActiveBtn.dataset.listenerAttached = "true";
+  setActiveBtn.addEventListener('click', async () => {
+    const selected = document.querySelector('input[name="plan"]:checked');
+    const planId = selected?.value || uploadedPlanId;
+    if (!planId) {
+      alert('Please select a plan to activate.');
+      return;
+    }
+
+    try {
+      const { data: upsertData, error: upsertError } = await supabase
+        .from('active_plan')
+        .upsert({ user_id: user.id, plan_id: planId }, { onConflict: 'user_id' })
+        .select('*');
+      if (upsertError) throw upsertError;
+      alert('✅ Active plan updated.');
+      window.location.href = 'index.html';
+    } catch (err) {
+      console.error(err);
+      alert('❌ Could not set active plan.');
+    }
+  });
+}
 
   if (!uploadButton.dataset.listenerAttached) {
     uploadButton.dataset.listenerAttached = "true";
