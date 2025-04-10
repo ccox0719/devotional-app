@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f97316" id="theme-color">
+    <title>Devotional</title>
+  
+    <!-- PWA Icons -->
+    <link rel="icon" href="/icons/icon-192x192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#f97316" />
+  
+    <!-- Supabase Environment -->
+    <script>
+      window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
+      window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
+    </script>
+  
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  
+<body>
+  <div class="header">
+    <div class="header-buttons">
+      <button class="menu-button">☰</button>
+      <button id="install-button" class="install-button" aria-label="Install App">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+          <path d="M12 2v12"></path>
+          <polyline points="5 11 12 18 19 11"></polyline>
+          <line x1="5" y1="22" x2="19" y2="22"></line>
+        </svg>
+      </button>               
+      </div>
+    <div class="header-content">
+      <div id="plan-logo"></div>
+      <h1 id="plan-title" class="title">Title</h1>
+      <p id="plan-subtitle" class="subtitle">subtitle description of plan</p>
+      <div class="date-container">
+        <div id="date-badge" class="date-badge">
+          12
+          <span>MAR</span>
+        </div>
+      </div>
+    </div>
+    <hr class="divider" />
+    <div id="content" class="devotional-text">
+      Loading today's devotional...
+    </div>
+
+    <div class="question-prayer">
+      <svg class="icon-heading" width="512pt" height="512pt" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(0,512) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+          <path d="M2315 5109 c-597 -61 -1141 -318 -1563 -739 -1002 -1000 -1002 -2620 0 -3620 406 -405 901 -648 1493 -732 119 -17 512 -16 635 1 580 80 1089 330 1489 732 464 467 723 1061 748 1719 26 711 -242 1393 -749 1900 -393 394 -891 643 -1453 726 -122 18 -477 26 -600 13z m390 -1280 c469 -79 674 -474 444 -855 -57 -94 -134 -179 -255 -280 -67 -56 -129 -118 -149 -148 -43 -64 -65 -148 -65 -246 0 -138 -49 -184 -194 -184 -101 0 -140 18 -167 77 -26 59 -26 235 0 339 39 153 100 236 276 378 172 139 214 196 223 306 12 158 -118 254 -330 242 -135 -7 -197 -43 -283 -164 -73 -101 -153 -119 -254 -56 -128 79 -109 268 42 416 159 156 429 223 712 175z m-111 -1974 c88 -42 145 -131 146 -224 0 -83 -19 -130 -75 -188 -104 -107 -260 -108 -362 -1 -130 136 -77 360 102 426 43 16 143 9 189 -13z"/>
+        </g>
+      </svg>
+      <ul id="questions-list"></ul>
+      <svg class="icon-heading" width="512pt" height="512pt" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(0,512) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+          <path d="M2370 4891 c-109 -35 -106 -30 -145 -231 -70 -356 -224 -862 -425 -1390 -135 -353 -139 -365 -159 -467 -11 -54 -24 -179 -31 -278 -23 -376 -72 -600 -175 -805 -24 -47 -59 -107 -78 -134 l-35 -48 48 -137 c26 -75 89 -256 140 -403 51 -148 97 -268 101 -268 4 0 32 14 61 31 65 39 143 75 408 190 235 103 297 141 357 222 78 106 73 23 73 1314 0 1300 8 1184 -82 1142 -62 -29 -105 -77 -114 -126 -87 -507 -186 -904 -247 -994 -25 -37 -54 -44 -70 -18 -8 13 -4 32 16 76 55 123 138 455 197 793 17 96 38 192 47 213 27 62 110 123 208 152 l40 12 3 567 c2 555 2 566 -18 586 -24 24 -48 24 -120 1z"/>
+          <path d="M2642 4894 l-22 -15 0 -573 0 -572 50 -13 c67 -17 151 -74 183 -123 14 -23 30 -64 36 -92 5 -28 21 -116 36 -196 59 -326 135 -625 192 -753 24 -54 25 -59 10 -74 -30 -30 -61 -4 -96 81 -54 129 -145 510 -201 841 -17 98 -28 138 -46 162 -27 35 -126 88 -149 79 -14 -5 -15 -136 -13 -1183 l3 -1178 24 -48 c60 -121 140 -177 411 -292 74 -31 209 -93 298 -137 90 -44 165 -78 166 -76 5 6 276 793 276 801 0 4 -17 34 -39 65 -78 116 -129 232 -171 397 -39 151 -57 281 -74 540 -19 267 -34 332 -141 610 -229 592 -390 1107 -471 1504 -25 125 -41 182 -55 197 -17 18 -142 64 -174 64 -6 0 -21 -7 -33 -16z"/>
+          <path d="M747 1633 c-197 -75 -356 -139 -355 -143 2 -4 104 -298 227 -654 124 -355 228 -645 232 -644 3 2 169 64 368 138 198 74 361 140 361 145 0 6 -100 299 -222 652 -164 474 -227 642 -238 642 -8 -1 -176 -62 -373 -136z"/>
+          <path d="M3772 1133 c-122 -351 -223 -644 -224 -652 -2 -9 106 -55 362 -151 201 -75 368 -134 372 -131 3 3 99 274 213 601 114 327 215 618 225 646 l18 52 -353 132 c-194 72 -362 134 -372 136 -18 5 -41 -58 -241 -633z"/>
+        </g>
+      </svg>
+      <ul id="prayers-list"></ul>
+    </div>
+
+    <div class="nav-bar">
+      <button id="prev-day">←</button>
+      <button id="theme-toggle" aria-label="Toggle Theme">
+        <svg class="icon-heading" width="512pt" height="512pt" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+          <g transform="translate(0,512) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+            <path d="M1810 5071 c-509 -169 -902 -442 -1265 -878 -61 -74 -198 -291 -259 -413 -140 -274 -229 -565 -267 -870 -20 -156 -17 -508 5 -655 84 -578 326 -1066 729 -1474 405 -409 910 -662 1492 -747 144 -21 499 -24 645 -5 749 95 1402 486 1826 1091 113 161 218 359 289 542 46 119 115 352 115 390 0 42 -36 106 -73 128 -80 49 -141 36 -260 -54 -326 -249 -663 -378 -1063 -406 -156 -12 -231 -9 -404 16 -754 109 -1373 659 -1576 1402 -84 309 -86 670 -4 986 67 260 148 425 345 704 53 75 60 128 23 194 -52 91 -131 105 -298 49z"/>
+          </g>
+        </svg>
+      </button>      
+      <button id="next-day">→</button>
+    </div>
+  </div>
+  <script src="main.js" type="module"></script>
+  <script src="install.js"></script>
+</body>
+</html>

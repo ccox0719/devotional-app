@@ -1,0 +1,7 @@
+# FORMAT INSTRUCTIONS:
+# - Use one row per devotional.
+# - Each question and prayer should go in its own column (e.g. Question 1, Question 2, Prayer 1).
+# - If using CSV and your text includes commas, wrap the cell in quotes.
+# - TSV avoids comma issues automatically.
+Day	Reference	Question 1	Question 2	Question 3	Prayer 1	Prayer 2
+1	Ecclesiastes 1	What might your boredom be revealing about the longings or emptiness in your soul?	How do your daily habits reflect a pursuit of meaning or futility?	What would it look like to seek eternal significance in today’s ordinary moments?	God, help me see what’s truly beneath my boredom—and meet me there with Your presence.	Teach me to turn quiet moments into connection with You.

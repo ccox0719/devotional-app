@@ -94,19 +94,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const csvFile = csvInput.files[0];
       const title = titleInput.value.trim();
       const subtitle = subtitleInput.value.trim();
-      const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(Boolean);
       const accentColor = accentColorPicker.value;
   
       if (!title || !subtitle || !csvFile) {
         alert('Please enter title, subtitle, and upload a CSV file.');
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Upload Plan';
         return;
       }
   
       const csvText = await csvFile.text();
-      const isTSV = csvFile.name.toLowerCase().endsWith('.tsv');
-      const delimiter = isTSV ? '\t' : ',';
+      const delimiter = csvFile.name.toLowerCase().endsWith('.tsv') ? '\t' : ',';
       const parsedData = parseCSV(csvText, delimiter);
   
       const newRow = {
@@ -118,12 +115,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         user_id: user.id
       };
   
-      // Upload logo if present
       if (logoFile) {
         if (logoFile.size > 1024 * 1024) {
           alert('Logo file must be under 1MB.');
-          uploadButton.disabled = false;
-          uploadButton.textContent = 'Upload Plan';
           return;
         }
   
@@ -135,19 +129,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
   
-      console.log('📝 Final row to insert:', newRow);
-  
       const { data: insertData, error: insertError } = await supabase
         .from('devotional_plans')
         .insert(newRow)
         .select('*')
         .single();
   
-      console.log('Insert response:', { insertData, insertError });
-  
       if (insertError) throw insertError;
   
       alert(`✅ Plan uploaded successfully! Plan ID: ${insertData.id}`);
+      uploadedPlanId = insertData.id;
   
       // Reset form
       titleInput.value = '';
@@ -157,7 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       logoInput.value = '';
       csvInput.value = '';
       logoPreview.src = '';
-      uploadedPlanId = insertData.id;
   
       loadPlanList();
     } catch (err) {
@@ -168,7 +158,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       uploadButton.textContent = 'Upload Plan';
     }
   });
-
+  
+  // Set a plan as active
+  setActiveBtn.addEventListener('click', async () => {
+    const selected = document.querySelector('input[name="plan"]:checked');
+    const planId = selected?.value || uploadedPlanId;
+    console.log('Selected planId:', planId);
+    if (!planId) {
+      alert('Please select a plan to activate.');
+      return;
+    }
+    try {
+      // Upsert the active plan with user_id using conflict resolution on user_id
+      const { data: upsertData, error: upsertError } = await supabase
+        .from('active_plan')
+        .upsert({
+          user_id: user.id,
+          plan_id: planId
+        }, { onConflict: 'user_id' })
+        .select('*');
+      if (upsertError) {
+        throw upsertError;
+      }
+      alert('✅ Active plan updated.');
+      window.location.href = 'index.html'; // Redirect to main.html after success
+    } catch (err) {
+      console.error(err);
+      alert('❌ Could not set active plan.');
+    }
+  });
   const selectTab = document.getElementById('select-tab');
   const uploadTab = document.getElementById('upload-tab');
   const selectSection = document.getElementById('select-section');
