@@ -5,6 +5,15 @@ git add .
 git commit -m "Your commit message"
 git push
 
+git checkout dev
+git add .
+git commit -m "Your message here"
+git push origin dev
+
+git checkout main
+git merge dev
+netlify deploy --prod
+
 # 🚀 Deploy to Netlify (Production)
 # Use when you're ready to publish your latest version to the live Netlify site.
 ----------------------------------------------------------------------------------------

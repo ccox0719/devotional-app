@@ -141,6 +141,8 @@ if (!setActiveBtn.dataset.listenerAttached) {
 
         alert(`✅ Plan uploaded successfully! Plan ID: ${insertData.id}`);
         uploadedPlanId = insertData.id;
+        csvStatus.textContent = `✅ "${csvFile.name}" uploaded successfully.`;
+      csvStatus.style.color = 'limegreen';
         titleInput.value = '';
         subtitleInput.value = '';
         tagsInput.value = '';
@@ -158,7 +160,18 @@ if (!setActiveBtn.dataset.listenerAttached) {
       }
     });
   }
+  const csvStatus = document.getElementById('csv-status');
 
+  csvInput.addEventListener('change', () => {
+    const file = csvInput.files[0];
+    if (file) {
+      csvStatus.textContent = `📄 "${file.name}" selected.`;
+      csvStatus.style.color = 'orange';
+    } else {
+      csvStatus.textContent = '';
+    }
+  });
+  const csvFile = csvInput.files[0];
   if (!setActiveBtn.dataset.listenerAttached) {
     setActiveBtn.dataset.listenerAttached = "true";
     setActiveBtn.addEventListener('click', async () => {
