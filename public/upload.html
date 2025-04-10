@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/icons/icon-192x192.png" type="image/png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#f97316" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+  <script>
+    window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
+    window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Plan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Devotional Plans</h1>
+
+    <!-- Tab Toggle -->
+    <div class="tab-toggle">
+      <button id="select-tab" class="active">Select Plan</button>
+      <button id="upload-tab">Upload Plan</button>
+    </div>
+
+    <!-- SELECT SECTION -->
+    <div id="select-section">
+      <div class="radio-section">
+        <h3>Select a Devotional Plan</h3>
+        <ul id="plan-list"></ul>
+    
+        <div class="plan-actions">
+          <button id="set-active" class="primary-button">Set Active</button>
+          <button id="delete-plan" class="primary-button">Delete</button>
+          <button id="reset-start" class="primary-button">Reset Start Date</button>
+        </div>
+      </div>
+    </div>
+
+<!-- UPLOAD SECTION -->
+<div id="upload-section" style="display: none;">
+  <div class="upload-card">
+    <form class="upload-form">
+      <div class="form-group">
+        <label for="title-input">Plan Title</label>
+        <input type="text" id="title-input" placeholder="Plan Title" />
+      </div>
+
+      <div class="form-group">
+        <label for="subtitle-input">Plan Subtitle</label>
+        <input type="text" id="subtitle-input" placeholder="Plan Subtitle" />
+      </div>
+
+      <div class="form-group">
+        <label for="tags-input">Tags (comma separated)</label>
+        <input type="text" id="tags-input" placeholder="e.g. Old Testament, Wisdom" />
+      </div>
+      
+      <div class="sample-download" style="margin-top: 1rem;">
+        <p style="margin-top: 1rem;">
+          Need help? <a href="sample_devotional.csv" download>Download sample file</a> (CSV supported))
+        </p>        
+      </div>
+      
+      <div class="form-group">
+        <label for="csv-upload">Upload CSV</label>
+        <label class="upload-icon">
+          <input type="file" id="csv-upload" accept=".csv" hidden />
+          <div class="upload-button">📤 Upload CSV</div>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="logo-upload">Upload Logo</label>
+        <input type="file" id="logo-upload" accept=".png, .jpg, .jpeg, .svg" />
+      </div>
+
+      <div class="form-group">
+        <label for="accent-color-picker">Choose Accent Color</label>
+        <input type="color" id="accent-color-picker" value="#f97316" />
+      </div>
+
+      <button id="upload-plan">Upload Plan</button>
+    </form>
+
+    <div id="logo-preview-container" style="margin-top: 1rem;">
+      <img id="logo-preview" class="logo-preview" src="" alt="Logo Preview" />
+    </div>
+  </div>
+</div>
+
+  <script type="module" src="upload.js"></script>
+  <script src="storage.js" type="module"></script>  
+</body>
+</html>

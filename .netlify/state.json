@@ -1,0 +1,21 @@
+{
+	"siteId": "8030fe87-c20a-4a9a-926a-7f2251f12612",
+	"geolocation": {
+		"data": {
+			"city": "Bellevue",
+			"country": {
+				"code": "US",
+				"name": "United States"
+			},
+			"subdivision": {
+				"code": "NE",
+				"name": "Nebraska"
+			},
+			"timezone": "America/Chicago",
+			"latitude": 41.1722,
+			"longitude": -95.9571,
+			"postalCode": "68147"
+		},
+		"timestamp": 1743424398952
+	}
+}

@@ -1,0 +1,34 @@
+# 📝 Save and Upload Changes to GitHub
+# Use when you're ready to commit your work and push it to the GitHub repo.
+----------------------------------------------------------------------------------------
+git add .
+git commit -m "Your commit message"
+git push
+
+# 🚀 Deploy to Netlify (Production)
+# Use when you're ready to publish your latest version to the live Netlify site.
+----------------------------------------------------------------------------------------
+netlify deploy --prod
+
+# 🧪 Run Local Netlify Dev Server
+# Use to preview your site locally in a Netlify-like environment before deploying.
+----------------------------------------------------------------------------------------
+netlify dev
+
+# 🔍 Check Git Status or Pull Latest From GitHub
+# Use to check what’s been changed or to get the latest version from GitHub.
+----------------------------------------------------------------------------------------
+git status
+git pull origin main
+
+# 🧹 Reset Local Files to Match GitHub
+# Use if you want to discard all local changes and match the remote GitHub repo exactly.
+----------------------------------------------------------------------------------------
+git fetch origin
+git reset --hard origin/main
+
+# ⚙️ Run Sync Script
+# Use to ensure your sync-and-push.sh script is executable and then run it.
+----------------------------------------------------------------------------------------
+chmod +x sync-and-push.sh
+./sync-and-push.sh

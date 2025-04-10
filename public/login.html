@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    window.SUPABASE_URL = 'https://sggxzlhpdkqjlepbwdqf.supabase.co';
+    window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnZ3h6bGhwZGtxamxlcGJ3ZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NTUwMzMsImV4cCI6MjA1ODMzMTAzM30.qJ3KaJbiV7MAD_wHQhix3EJCJPWAEMYktAyqVocthwI';
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Login</h1>
+    <p>Please enter your email to sign in:</p>
+    <input type="email" id="email-input" placeholder="Your email" />
+    <button id="login-button">Sign In</button>
+    <div id="message" style="margin-top: 1rem;"></div>
+    <div id="oauth-buttons" style="margin-top: 1rem;">
+      <button id="google-login">Sign in with Google</button>
+    </div>
+  </div>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+    const emailInput = document.getElementById('email-input');
+    const loginButton = document.getElementById('login-button');
+    const messageDiv = document.getElementById('message');
+
+    loginButton.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        messageDiv.textContent = 'Please enter a valid email.';
+        return;
+      }
+      
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (error) {
+        messageDiv.textContent = 'Error: ' + error.message;
+      } else {
+        messageDiv.textContent = 'Check your email for the magic link to sign in.';
+      }
+    });
+
+    const googleButton = document.getElementById('google-login');
+
+    googleButton.addEventListener('click', async () => {
+      const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+      if (error) {
+        messageDiv.textContent = 'Google login error: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
