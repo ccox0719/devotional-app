@@ -45,6 +45,45 @@ document.addEventListener('DOMContentLoaded', async () => {
   const user = await checkAuth();
   if (!user) return; // Redirection is handled in checkAuth
 
+  // Auto-assign default plan if user has no plans
+  try {
+    const { data: existingPlans, error: planCheckError } = await supabase
+      .from('devotional_plans')
+      .select('id')
+      .eq('user_id', user.id);
+
+    if (!planCheckError && existingPlans.length === 0) {
+      const { data: defaultPlan, error: defaultFetchError } = await supabase
+        .from('devotional_plans')
+        .select('*')
+        .eq('title', 'In His Presence')
+        .eq('is_template', true)
+        .single();
+
+      if (!defaultFetchError && defaultPlan) {
+        const newPlan = {
+          ...defaultPlan,
+          id: undefined,
+          user_id: user.id,
+          is_template: false
+        };
+        delete newPlan.created_at;
+
+        const { error: insertError } = await supabase
+          .from('devotional_plans')
+          .insert(newPlan);
+
+        if (insertError) {
+          console.error('❌ Failed to assign default plan:', insertError);
+        } else {
+          console.log('✅ Default plan assigned to new user!');
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error during default plan check/clone:', err);
+  }
+
   // Listen for auth state changes (optional but recommended)
   subscribeToAuthChanges((event, session) => {
     if (!session) {
@@ -131,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
       const { data: insertData, error: insertError } = await supabase
         .from('devotional_plans')
-        .insert(newRow)
+        .upsert(newRow, { onConflict: 'user_id,title' })
         .select('*')
         .single();
   
@@ -228,6 +267,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         <hr style="margin: 0.5rem 0; border: 0; border-top: 1px solid #ccc;" />
       `;
       planList.appendChild(li);
+
+      // Attach modal preview on plan select
+      li.querySelector('input[type="radio"]').addEventListener('click', async () => {
+        const planId = plan.id;
+        const { data: planRecord, error } = await supabase
+          .from('devotional_plans')
+          .select('*')
+          .eq('id', planId)
+          .single();
+        if (error) {
+          console.error('❌ Failed to fetch plan details:', error);
+          return;
+        }
+
+        const planDetails = {
+          title: planRecord.title,
+          subtitle: planRecord.subtitle,
+          summary: planRecord.summary || '',
+          tags: planRecord.tags || [],
+          extra: `Created on: ${new Date(planRecord.created_at).toLocaleDateString()}`
+        };
+
+        // Populate modal
+        document.getElementById('modal-plan-title').textContent = planDetails.title;
+        document.getElementById('modal-plan-subtitle').textContent = planDetails.subtitle;
+        document.getElementById('modal-plan-summary').value = planDetails.summary;
+        document.getElementById('modal-plan-tags').textContent = 'Tags: ' + planDetails.tags.join(', ');
+        document.getElementById('modal-plan-extra').textContent = planDetails.extra;
+        document.getElementById('plan-modal').classList.add('show');
+      });
     });
   }
   

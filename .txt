@@ -1,0 +1,43 @@
+# 🧠 GIT + NETLIFY DEPLOY WORKFLOW
+#Extra Measures
+cd ..
+cp -r devotional-app devotional-app-backup
+
+# 1. Add and commit all local changes
+git add .
+git commit -m "Your commit message"
+
+# 2. Push to GitHub
+git push origin main
+
+git push origin main --force
+
+# 3. (Optional) Reset local files to match GitHub main if needed
+git fetch origin
+git reset --hard origin/main
+git clean -fd
+
+# 4. (Optional) Create or switch branches
+git checkout -b my-feature-branch   # create new branch
+git checkout main                   # switch back to main
+
+# 5. Link local project to Netlify (only needed once)
+netlify link
+
+# 6. Deploy to a preview URL (safe testing)
+netlify deploy --dir=public
+
+# 7. Deploy to production (LIVE site!)
+netlify deploy --prod --dir=public
+
+# 8. (Optional) Run Netlify locally
+netlify dev
+
+# 9. Check which Netlify site you're connected to
+netlify status
+netlify logout
+
+#Switch profiles
+open -e ~/.gitconfig
+
+
